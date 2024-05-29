@@ -99,8 +99,26 @@ db.restaurants.count({
 //db.restaurants.aggregate([{ $out: "restaurants_copy" }]);
 
 //2.2.15
-db.restaurants_copy.update(
+/* db.restaurants_copy.update(
   { name: "Carvel Ice Cream", borough: "Brooklyn" },
   { $set: { borough: "Manhattan" } }
 );
-db.restaurants_copy.find({ name: "Carvel Ice Cream" });
+db.restaurants_copy.find({ name: "Carvel Ice Cream" }); */
+
+//2.2.16
+/* db.restaurants_copy.update(
+    {},
+    { $set: { "cuisine": "Japanese" } }
+ ) 
+
+db.restaurants_copy.find({
+    cuisine: "Japanese",
+}) */
+
+//2.2.17
+/* db.restaurants_copy.deleteMany({ "borough": "Brooklyn" })
+
+db.restaurants_copy.find({ "borough": "Brooklyn" }) */
+
+//2.2.18
+db.restaurants_copy.drop();
