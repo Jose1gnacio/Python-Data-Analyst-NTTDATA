@@ -68,8 +68,8 @@ db.Prueba.insertOne(
 //2.2.10
 //db.restaurants.find({ cuisine: "American" });
 
-//2.2.11AA
-db.restaurants.find({
+//2.2.11
+/* db.restaurants.find({
   $or: [{ borough: "Brooklyn" }, { cuisine: "Italian" }],
 });
 let contador = db.restaurants.countDocuments({
@@ -78,4 +78,29 @@ let contador = db.restaurants.countDocuments({
 print(
   "Cantidad de restaurants en Brooklyn o que sirven comida Italiana: " +
     contador
+); */
+
+//2.2.12
+/* db.restaurants.count({
+    borough: "Brooklyn", cuisine: "Italian"
+}) */
+
+//2.2.13
+/* db.restaurants.find({
+  borough: { $nin: ["Staten Island", "Manhattan"] },
+});
+
+db.restaurants.count({
+  borough: { $nin: ["Staten Island", "Manhattan"] },
+});
+ */
+
+//2.2.14
+//db.restaurants.aggregate([{ $out: "restaurants_copy" }]);
+
+//2.2.15
+db.restaurants_copy.update(
+  { name: "Carvel Ice Cream", borough: "Brooklyn" },
+  { $set: { borough: "Manhattan" } }
 );
+db.restaurants_copy.find({ name: "Carvel Ice Cream" });
