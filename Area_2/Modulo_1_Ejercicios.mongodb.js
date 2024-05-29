@@ -116,9 +116,9 @@ db.restaurants_copy.find({
 }) */
 
 //2.2.17
-/* db.restaurants_copy.deleteMany({ "borough": "Brooklyn" })
+db.restaurants_copy.remove({ borough: "Brooklyn" });
 
-db.restaurants_copy.find({ "borough": "Brooklyn" }) */
+db.restaurants_copy.find({ borough: "Brooklyn" });
 
 //2.2.18
 db.restaurants_copy.drop();
