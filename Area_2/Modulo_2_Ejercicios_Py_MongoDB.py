@@ -43,14 +43,19 @@ except pymongo.errors.ConnectionFailure as errorConexion:
 from tkinter import*
 from tkinter import ttk
 from tkinter import messagebox
+import os
+from dotenv import load_dotenv
 import pymongo
 
-MONGO_HOST="localhost"
-MONGO_PORT="27017"
-MONGO_TIME_OUT=1000 
+# Cargar variables de entorno desde el archivo .env
+load_dotenv()
 
-MONGO_URL_LOCAL="mongodb://"+MONGO_HOST+":"+MONGO_PORT+"/" 
-MONGO_URL_CLOUD="mongodb+srv://joseignacio:Ignacio01@cluster0.buvsnzb.mongodb.net/" 
+MONGO_HOST= "localhost"
+MONGO_PORT= "27017"
+MONGO_TIME_OUT= 1000 
+
+MONGO_URL_LOCAL= "mongodb://"+MONGO_HOST+":"+MONGO_PORT+"/" 
+MONGO_URL_CLOUD= os.getenv("MONGO_URL_CLOUD") 
 
 
 

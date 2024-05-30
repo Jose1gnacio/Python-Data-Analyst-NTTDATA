@@ -1,0 +1,91 @@
+import mysql.connector
+#conexion = mysql.connector.connect(host = "localhost", user = "root", password = "")
+
+# VERIFICAMOS LA CONEXIÓN
+#print(conexion)
+
+#cursor = conexion.cursor()
+
+# SE CREA LA BASE DE DATOS "chicago_safety_data"
+#cursor.execute("CREATE DATABASE chicago_safety_data;")
+
+# VERIFICAMOS SI SE CREO LA BASE DE DATOS "chicago_safety_data"
+""" cursor.execute("show databases")
+for base in cursor:
+    print(base) """
+
+# FUNCIÓN PARA CREAR TABLAS
+def crear_tablas():
+    conexion = mysql.connector.connect(
+        host ="localhost",
+        user ="root",
+        password ="",
+        database ="chicago_safety_data"
+    )
+    cursor = conexion.cursor()
+
+    # Tabla 'areas_comunitarias' table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS areas_comunitarias (
+            id_area_comunitaria INT AUTO_INCREMENT PRIMARY KEY,
+            nombre VARCHAR(255) NOT NULL,
+            año YEAR NOT NULL,
+            poblacion INT,
+            ingresos FLOAT,
+            latinos FLOAT,
+            negros FLOAT,
+            blancos FLOAT,
+            asiaticos FLOAT,
+            otros FLOAT
+        );
+    ''')
+
+    # Create 'comisarias' table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS comisarias (
+            id_comisaria INT AUTO_INCREMENT PRIMARY KEY,
+            nombre VARCHAR(255) NOT NULL,
+            area_comunitaria INT,
+            direccion VARCHAR(255),
+            telefono VARCHAR(20),
+            latitud FLOAT,
+            longitud FLOAT,
+            FOREIGN KEY (area_comunitaria) REFERENCES areas_comunitarias(id)
+        );
+    ''')
+
+    # Create 'hospitales' table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS hospitales (
+            id_hospital INT AUTO_INCREMENT PRIMARY KEY,
+            nombre VARCHAR(255) NOT NULL,
+            area_comunitaria INT,
+            direccion VARCHAR(255),
+            telefono VARCHAR(20),
+            latitud FLOAT,
+            longitud FLOAT,
+            FOREIGN KEY (area_comunitaria) REFERENCES areas_comunitarias(id)
+        );
+    ''')
+
+    # Create 'delitos' table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS delitos (
+            id_delito INT AUTO_INCREMENT PRIMARY KEY,
+            num_caso VARCHAR(255) NOT NULL,
+            descripcion TEXT,
+            arrestado BOOLEAN,
+            area_comunitaria INT,
+            cuadra VARCHAR(255),
+            latitud FLOAT,
+            longitud FLOAT,
+            FOREIGN KEY (area_comunitaria) REFERENCES areas_comunitarias(id)
+        );
+    ''')
+
+    conexion.commit()
+    cursor.close()
+    conexion.close()
+
+if __name__ == "__main__":
+    crear_tablas()
