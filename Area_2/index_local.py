@@ -50,11 +50,12 @@ MONGO_URL_LOCAL="mongodb://"+MONGO_HOST+":"+MONGO_PORT+"/"
 MONGO_URL_CLOUD="mongodb+srv://joseignacio:Ignacio01@cluster0.buvsnzb.mongodb.net/" 
 
 
-MONGO_BASEDATOS="sample_training"
-MONGO_COLECCION="companies"
+
 
 #2.4.1
-""" try:
+""" MONGO_BASEDATOS="sample_training"
+    MONGO_COLECCION="companies"
+    try:
     cliente=pymongo.MongoClient(MONGO_URL_CLOUD,serverSelectionTimeoutMS=MONGO_TIME_OUT)
     cliente.server_info()
     #print("Conexion con mongo exitosa")
@@ -75,7 +76,9 @@ except pymongo.errors.ConnectionFailure as errorConexion:
     print("Fallo al conectarse a mongodb "+errorConexion) """
 
 #2.4.2
-""" try:
+""" MONGO_BASEDATOS="sample_training"
+    MONGO_COLECCION="companies"
+    try:
     cliente=pymongo.MongoClient(MONGO_URL_CLOUD,serverSelectionTimeoutMS=MONGO_TIME_OUT)
     cliente.server_info()
     #print("Conexion con mongo exitosa")
@@ -94,7 +97,9 @@ except pymongo.errors.ConnectionFailure as errorConexion:
     print("Fallo al conectarse a mongodb "+errorConexion) """
 
 #2.4.3
-""" try:
+""" MONGO_BASEDATOS="sample_training"
+    MONGO_COLECCION="companies"
+    try:
     cliente=pymongo.MongoClient(MONGO_URL_CLOUD,serverSelectionTimeoutMS=MONGO_TIME_OUT)
     cliente.server_info()
     #print("Conexion con mongo exitosa")
@@ -115,6 +120,8 @@ except pymongo.errors.ConnectionFailure as errorConexion:
     print("Fallo al conectarse a mongodb "+errorConexion) """
 
 #2.4.4
+MONGO_BASEDATOS="sample_training"
+MONGO_COLECCION="companies"
 try:
     cliente=pymongo.MongoClient(MONGO_URL_CLOUD,serverSelectionTimeoutMS=MONGO_TIME_OUT)
     cliente.server_info()
