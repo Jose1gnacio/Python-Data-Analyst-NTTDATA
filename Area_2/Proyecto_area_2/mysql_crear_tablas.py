@@ -1,18 +1,4 @@
 import mysql.connector
-#conexion = mysql.connector.connect(host = "localhost", user = "root", password = "")
-
-# VERIFICAMOS LA CONEXIÓN
-#print(conexion)
-
-#cursor = conexion.cursor()
-
-# SE CREA LA BASE DE DATOS "chicago_safety_data"
-#cursor.execute("CREATE DATABASE chicago_safety_data;")
-
-# VERIFICAMOS SI SE CREO LA BASE DE DATOS "chicago_safety_data"
-""" cursor.execute("show databases")
-for base in cursor:
-    print(base) """
 
 # FUNCIÓN PARA CREAR TABLAS
 def crear_tablas():
