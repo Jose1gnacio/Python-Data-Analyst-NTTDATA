@@ -68,13 +68,7 @@ criminales = [
     }
 ]
 
-""" try:
-    cliente=pymongo.MongoClient(MONGO_URL_CLOUD,serverSelectionTimeoutMS=MONGO_TIME_OUT)
-    cliente.server_info()
-    #print("Conexion con mongo exitosa")
-
-    baseDatos=cliente[MONGO_BASEDATOS]
-    coleccion=baseDatos[MONGO_COLECCION]
+""" 
 
     # 3.1 Insertar un criminal
     coleccion.insert_one(nuevo_criminal)
@@ -84,32 +78,11 @@ criminales = [
     for criminal in criminales:
         coleccion.insert_one(criminal)
         print(f"Datos del criminal {criminal['nombre']} insertados correctamente.")
-        
     
-    # 3.4 Busqueda criminales por delito
-    criminales_robo_violencia = coleccion.find({
-        'delitos': 'robo con violencia'
-    })
+    
+    
 
-    for criminal in criminales_robo_violencia:
-        print(criminal)
-
-    # 3.5 Busqueda criminales por estatura y peso
-    criminales_estatura_peso = coleccion.find({
-        'estatura': {'$lte': 200},  # Menor o igual 
-        'peso': {'$gte': 40}         # Mayor o igual 
-    })
-
-    for criminal in criminales_estatura_peso:
-        print(criminal)
-
-
-
-    cliente.close()
-except pymongo.errors.ServerSelectionTimeoutError as errorTiempo:
-    print("Fallo al conectarse a mongodb "+errorTiempo)
-except pymongo.errors.ConnectionFailure as errorConexion:
-    print("Fallo al conectarse a mongodb "+errorConexion) """
+ """
 
 # Función para conectar con MongoDB
 def conectar_mongodb():
@@ -124,7 +97,7 @@ def conectar_mongodb():
         return None
 
 # Función para buscar criminales entre fechas de nacimiento
-""" def buscar_por_fecha():
+def buscar_por_fecha():
     coleccion = conectar_mongodb()
     if coleccion is not None:  # Verificamos si la colección no es None
         fecha_inicio_str = input("Ingrese la fecha de inicio en formato YYYY-MM-DD: ")
@@ -139,7 +112,7 @@ def conectar_mongodb():
             for criminal in criminales_nacimiento_entre_fechas:
                 print(criminal)
         except ValueError:
-            print("Formato de fecha incorrecto. Utilice el formato YYYY-MM-DD.") """
+            print("Formato de fecha incorrecto. Utilice el formato YYYY-MM-DD.")
 
 # Función para buscar criminales por delito
 def buscar_por_delito():
@@ -157,23 +130,36 @@ def buscar_por_delito():
             print("Error al buscar el delito:", e)
 
 # Función para buscar criminales por peso y estatura
-""" def buscar_por_estatura_peso():
+def buscar_por_estatura_peso():
     coleccion = conectar_mongodb()
     if coleccion is not None:
-        estatura = float(input("Ingrese la estatura (en metros) a buscar: "))
-        peso = float(input("Ingrese el peso (en kilogramos) a buscar: "))
+        estatura = int(input("Ingrese la estatura (en centímetros) a buscar: "))
+        peso = int(input("Ingrese el peso (en kilogramos) a buscar: "))
         try:
-            # Utilizamos una consulta en la colección para encontrar los registros que coincidan con la estatura y peso
+            # Utilizamos una consulta en la colección para encontrar los registros que cumplan con la condición de estatura y peso
             delincuentes_encontrados = coleccion.find({
-                'estatura': {'$eq': estatura},
-                'peso': {'$eq': peso}
+                'estatura': {'$lt': estatura},  # Estatura menor que el valor ingresado
+                'peso': {'$gt': peso}           # Peso mayor que el valor ingresado
             })
 
             # Mostramos los delincuentes encontrados
             for delincuente in delincuentes_encontrados:
                 print(delincuente)
         except Exception as e:
-            print("Error al buscar delincuentes por estatura y peso:", e) """
+            print("Error al buscar delincuentes por estatura y peso:", e)
 
+# FUnción para listar todos los criminales
+def mostrar_todos_los_criminales():
+    coleccion = conectar_mongodb()
+    if coleccion is not None:
+        try:
+            # Utilizamos find sin condiciones para obtener todos los documentos en la colección
+            criminales = coleccion.find()
+
+            # Mostramos los criminales encontrados
+            for criminal in criminales:
+                print(criminal)
+        except Exception as e:
+            print("Error al listar criminales:", e)
 
 

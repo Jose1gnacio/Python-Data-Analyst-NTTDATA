@@ -123,7 +123,7 @@ def insertar_area_comunitaria():
     conexion.close() """
 
 #Función para insertar Comisaria
-def insertar_comisaria():
+def agregar_comisaria():
     # Solicitar datos al usuario
     nombre = input("Nombre de la Comisaria: ")
     area_comunitaria = input("Número del Area comunitaria: ")
@@ -153,7 +153,7 @@ def insertar_comisaria():
     conexion.close()
 
 #Función para insertar Hospital
-def insertar_hospital():
+def agregar_hospital():
     # Solicitar datos al usuario
     nombre = input("Nombre del hospital: ")
     area_comunitaria = input("Área comunitaria: ")
@@ -183,7 +183,7 @@ def insertar_hospital():
     conexion.close()
 
 #Función para insertar Delito
-def insertar_delito():
+def agregar_delito():
     # Solicitar datos al usuario
     num_caso = input("Número caso: ")
     descripcion = input("Descripción: ")

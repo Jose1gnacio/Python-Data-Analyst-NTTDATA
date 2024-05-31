@@ -16,17 +16,11 @@ import mongodb_delincuencia
 
 
 # Vvariables para el menú que controla los procesos.
-proceso_busqueda_delito = 1
-proceso_buscar_criminal = 2
-proceso_listar_datos = 3
-proceso_listar_delitos = 2345
-proceso_agregar_delito = 3
-proceso_editar_delito = 4
-proceso_listar_comisarias = 5
-proceso_agregar_comisaria = 6
-proceso_listar_hospitales = 7
-proceso_agregar_hospital = 8
-proceso_listar_areas_comunitarias = 9
+proceso_delitos = 1
+proceso_criminal = 2
+proceso_comisarias = 3
+proceso_hospitales = 4
+proceso_areas_comunitarias = 5
 proceso_mapa = 55
 proceso_coordenadas = 60
 proceso_agregar_areas_con_delitos = 70
@@ -49,14 +43,32 @@ transformer = Transformer.from_crs(sistema_referencia_origen, sistema_referencia
 def controlador(par_proceso):
     proceso = par_proceso
     
-    if proceso == proceso_busqueda_delito:        
-        mysql_consultas_datos.buscar_delitos_por_valor()
+    if proceso == proceso_delitos:
+        opcion_orden = int(input("¿Eliga una opción?\n\
+- 1) Buscar delitos.\n\
+- 2) Mostrar todos los delitos.\n\
+- 3) Agregar delito.\n\
+- 4) Editar delito.\n\
+Introduce el número que corresponda con la opción escogida: "))
+        if opcion_orden == 1:
+            mysql_consultas_datos.buscar_delitos_por_valor()
+        elif opcion_orden == 2:
+            mysql_consultas_datos.mostrar_todos_los_delitos()
+        elif opcion_orden == 3:
+            mysql_insertar_datos.agregar_delito()
+        elif opcion_orden == 4:
+            mysql_consultas_datos.editar_delito()
+        else:
+            opcion_orden = input("Elige una opción válida. Introduce el número que corresponda con la opción escogida: ")
 
-    elif proceso == proceso_buscar_criminal:
-        opcion_orden = int(input("¿Eliga un parametro para buscar al criminal?\n\
-- 1) Entre fehcas de nacimiento.\n\
-- 2) Por delito.\n\
-- 3) Por estatura y peso.\n\
+    elif proceso == proceso_criminal:
+        opcion_orden = int(input("¿Eliga una opción?\n\
+- 1) Buscar criminales entre fehcas de nacimiento.\n\
+- 2) Buscar Por delito.\n\
+- 3) Buscar por estatura y peso.\n\
+- 4) Mostrar lista con todos los criminales.\n\
+- 5) Agregar un criminal.\n\
+- 6) Editar un criminal.\n\
 Introduce el número que corresponda con la opción escogida: "))
         if opcion_orden == 1:
             mongodb_delincuencia.buscar_por_fecha()
@@ -64,49 +76,47 @@ Introduce el número que corresponda con la opción escogida: "))
             mongodb_delincuencia.buscar_por_delito()
         elif opcion_orden == 3:
             mongodb_delincuencia.buscar_por_estatura_peso()
+        elif opcion_orden == 4:
+            mongodb_delincuencia.mostrar_todos_los_criminales()
+        elif opcion_orden == 5:
+            mongodb_delincuencia.buscar_por_estatura_peso()#falta
+        elif opcion_orden == 6:
+            mongodb_delincuencia.buscar_por_estatura_peso()#falta
         else:
             opcion_orden = input("Elige una opción válida. Introduce el número que corresponda con la opción escogida: ")
 
-    elif proceso == proceso_listar_datos:
-        opcion_orden = int(input("\n¿Eliga la lista de datos que desea ver?\n\
-- 1) Delitos.\n\
-- 2) Criminales.\n\
-- 3) Comisarias.\n\
-- 4) Hospitales.\n\
-- 5) Áreas comunitarias.\n\
+    elif proceso == proceso_comisarias:
+        opcion_orden = int(input("\n¿Eliga una opción?\n\
+- 1) Mostrar todas las comisarias.\n\
+- 2) Agregar una comisaria.\n\
 Introduce el número que corresponda con la opción escogida: "))
         if opcion_orden == 1:
-            mysql_consultas_datos.mostrar_todos_los_delitos()
+            mysql_consultas_datos.mostrar_todas_las_comisarias()            
         elif opcion_orden == 2:
-            mongodb_delincuencia.buscar_por_fecha()
-        elif opcion_orden == 3:
-            mysql_consultas_datos.mostrar_todas_las_comisarias()
-        elif opcion_orden == 4:
-            mysql_consultas_datos.mostrar_todos_los_hospitales()
-        elif opcion_orden == 5:
-            mysql_consultas_datos.mostrar_areas_comunitarias()
+            mysql_insertar_datos.agregar_comisaria()            
+        else:
+            opcion_orden = input("Elige una opción válida. Introduce el número que corresponda con la opción escogida: ")     
+
+    elif proceso == proceso_hospitales:
+        opcion_orden = int(input("\n¿Eliga una opción?\n\
+- 1) Mostrar todos los Hospitales.\n\
+- 2) Agregar un Hospital.\n\
+Introduce el número que corresponda con la opción escogida: "))
+        if opcion_orden == 1:
+            mysql_consultas_datos.mostrar_todos_los_hospitales()            
+        elif opcion_orden == 2:
+            mysql_insertar_datos.agregar_hospital()       
         else:
             opcion_orden = input("Elige una opción válida. Introduce el número que corresponda con la opción escogida: ")
-     
 
-    elif proceso == proceso_agregar_delito:
-        mysql_insertar_datos.insertar_delito()
-        print("¡Nuevo delito agregado con éxito!")
-
-    elif proceso == proceso_editar_delito:
-        mysql_consultas_datos.editar_delito()
-   
-    elif proceso == proceso_agregar_comisaria:
-        mysql_insertar_datos.insertar_comisaria()
-        print("Nueva comisaría agregada con éxito.")
-
-    
-
-    elif proceso == proceso_agregar_hospital:
-        mysql_insertar_datos.insertar_hospital()
-        print("Nueva comisaría agregada con éxito.")
-    
-    
+    elif proceso == proceso_areas_comunitarias:
+        opcion_orden = int(input("\n¿Eliga una opción?\n\
+- 1) Mostrar todas las Áreas Comunitarias Hospitales.\n\
+Introduce el número que corresponda con la opción escogida: "))
+        if opcion_orden == 1:
+            mysql_consultas_datos.mostrar_areas_comunitarias()    
+        else:
+            opcion_orden = input("Elige una opción válida. Introduce el número que corresponda con la opción escogida: ")    
 
     elif proceso == proceso_mapa:
         consultar_mapa_registrado()
@@ -143,28 +153,24 @@ def main():
 
     continuar = True
     while continuar:
-        proceso = int(input("\n¡Hola Agente! ¿Qué desea hacer hoy?\n\
-\n1) Buscar un delito.\n\
-2) Buscar un criminal.\n\
-3) Agregar un delito.\n\
-4) Editar un delito.\n\
-5) Mostrar todas las comisarias.\n\
-6) Agregar una comisaría.\n\
-7) Mostrar todos los hospitales.\n\
-8) Agregar un hospital.\n\
-9) Mostrar todas las áreas comunitarias.\n\
-10) Consultar un mapa de delitos y comisarías existente.\n\
-8) Establecer un nuevo mapa de comisarías y delitos.\n\
-7) Agregar datos sobre delitos en áreas comunitarias.\n\
-8) Ver el índice de criminalidad por áreas.\n\
-9) Mostrar y ordenar los delitos existentes.\n\
-10) Calcular el tiempo entre delitos.\n\
-11) Comprobar cuál es la comisaría más cercana a cada delito.\n\
-12) Cerrar sesión.\n\
+        proceso = int(input("\n¡Hola Agente! ¿Con que información desea trabajar?\n\
+\n1) Delitos.\n\
+2) Criminales.\n\
+3) Comisarias.\n\
+4) Hospitales.\n\
+5) Áreas comunitarias.\n\
+6) Consultar un mapa de delitos y comisarías existente.\n\
+7) Establecer un nuevo mapa de comisarías y delitos.\n\
+8) Agregar datos sobre delitos en áreas comunitarias.\n\
+9) Ver el índice de criminalidad por áreas.\n\
+10) Mostrar y ordenar los delitos existentes.\n\
+11) Calcular el tiempo entre delitos.\n\
+12) Comprobar cuál es la comisaría más cercana a cada delito.\n\
+13) Cerrar sesión.\n\
 \nIntroduce el número que corresponda con la opción escogida: "))
         controlador(proceso)
 
-        if proceso == 12:
+        if proceso == 13:
             continuar = False
         else:
             respuesta = input("¿Desea hacer algo más? (SI/NO): ").strip().lower()
