@@ -1,5 +1,11 @@
 import mysql.connector
 
+# Creación base de datos
+""" conexion = mysql.connector.connect(host = "localhost", user = "root", password = "")
+cursor = conexion.cursor()
+cursor.execute("CREATE DATABASE chicago_safety_data;") """
+
+
 # FUNCIÓN PARA CREAR TABLAS
 def crear_tablas():
     conexion = mysql.connector.connect(
@@ -36,7 +42,7 @@ def crear_tablas():
             telefono VARCHAR(20),
             latitud FLOAT,
             longitud FLOAT,
-            FOREIGN KEY (area_comunitaria) REFERENCES areas_comunitarias(id)
+            FOREIGN KEY (area_comunitaria) REFERENCES areas_comunitarias(id_area_comunitaria)
         );
     ''')
 
@@ -50,7 +56,7 @@ def crear_tablas():
             telefono VARCHAR(20),
             latitud FLOAT,
             longitud FLOAT,
-            FOREIGN KEY (area_comunitaria) REFERENCES areas_comunitarias(id)
+            FOREIGN KEY (area_comunitaria) REFERENCES areas_comunitarias(id_area_comunitaria)
         );
     ''')
 
@@ -63,9 +69,10 @@ def crear_tablas():
             arrestado BOOLEAN,
             area_comunitaria INT,
             cuadra VARCHAR(255),
+            fecha DATETIME,
             latitud FLOAT,
             longitud FLOAT,
-            FOREIGN KEY (area_comunitaria) REFERENCES areas_comunitarias(id)
+            FOREIGN KEY (area_comunitaria) REFERENCES areas_comunitarias(id_area_comunitaria)
         );
     ''')
 
