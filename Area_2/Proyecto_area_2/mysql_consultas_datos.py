@@ -293,6 +293,81 @@ def mostrar_areas_comunitarias():
             cursor.close()
             conexion.close()
 
+# Función para buscar coordenadas comisarias
+def coordenadas_comisarias():
+    ubicaciones_comisarias = []
+    
+    try:
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="chicago_safety_data"
+        )
+        cursor = conexion.cursor()
+
+        # Consulta SQL para seleccionar todas las comisarías
+        consulta = "SELECT nombre, latitud, longitud FROM comisarias"
+        cursor.execute(consulta)
+
+        # Obtener todas las filas de resultados
+        comisarias = cursor.fetchall()
+
+        if not comisarias:
+            print("No hay comisarías registradas en la base de datos.")
+        else:
+            # Obtener ubicaciones de todas las comisarías
+            for comisaria in comisarias:
+                nombre, latitud, longitud = comisaria
+                ubicaciones_comisarias.append((float(latitud), float(longitud), nombre))
+
+    except mysql.connector.Error as error:
+        print("Error al conectar a la base de datos:", error)
+
+    finally:
+        if conexion.is_connected():
+            cursor.close()
+            conexion.close()
+    
+    return ubicaciones_comisarias
+
+# Función para buscar coordenadas de delitos
+def coordenadas_delitos():
+    ubicaciones_delitos = []
+
+    try:
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="chicago_safety_data"
+        )
+        cursor = conexion.cursor()
+
+        # Consulta SQL para obtener todos los delitos
+        consulta = '''
+            SELECT num_caso, descripcion, latitud, longitud FROM delitos
+        '''
+        cursor.execute(consulta)
+
+        # Obtener resultados de la consulta
+        delitos = cursor.fetchall()
+
+        if delitos:
+            for delito in delitos:
+                num_caso, descripcion, latitud, longitud = delito
+                if latitud and longitud:  # Verificar que latitud y longitud no sean nulos
+                    ubicaciones_delitos.append((float(latitud), float(longitud), f"Núm caso: {num_caso}\n{descripcion}"))
+
+    except mysql.connector.Error as error:
+        print("Error al conectar a la base de datos:", error)
+
+    finally:
+        if conexion.is_connected():
+            cursor.close()
+            conexion.close()
+
+    return ubicaciones_delitos
 
 #if __name__ == "__main__":
     #editar_delito()

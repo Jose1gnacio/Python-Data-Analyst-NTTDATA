@@ -21,14 +21,14 @@ proceso_criminal = 2
 proceso_comisarias = 3
 proceso_hospitales = 4
 proceso_areas_comunitarias = 5
-proceso_mapa = 55
-proceso_coordenadas = 60
-proceso_agregar_areas_con_delitos = 70
-proceso_indice_criminalidad = 80
-proceso_ordenar_delitos = 90
-proceso_tiempo_entre_delitos = 100
-proceso_comisaria_entre_delitos = 110
-proceso_cerrar_app = 12
+proceso_mapa = 6
+proceso_coordenadas = 7
+proceso_agregar_areas_con_delitos = 8
+proceso_indice_criminalidad = 9
+proceso_ordenar_delitos = 10
+proceso_tiempo_entre_delitos = 11
+proceso_comisaria_entre_delitos = 12
+proceso_cerrar_app = 13
 
 delitos = []                                # Lista de los delitos cometidos.
 comisarias = []                             # Lista de las comisarias.
@@ -119,9 +119,7 @@ Introduce el número que corresponda con la opción escogida: "))
             opcion_orden = input("Elige una opción válida. Introduce el número que corresponda con la opción escogida: ")    
 
     elif proceso == proceso_mapa:
-        consultar_mapa_registrado()
-    elif proceso == proceso_coordenadas:
-        establecer_coordenadas_mapa()
+        ver_mapa()
     elif proceso == proceso_agregar_areas_con_delitos:
         nuevo_delitos_area = agregar_delitos_area()
     elif proceso == proceso_indice_criminalidad:
@@ -159,8 +157,7 @@ def main():
 3) Comisarias.\n\
 4) Hospitales.\n\
 5) Áreas comunitarias.\n\
-6) Consultar un mapa de delitos y comisarías existente.\n\
-7) Establecer un nuevo mapa de comisarías y delitos.\n\
+6) Ver mapa de delitos y comisarias.\n\
 8) Agregar datos sobre delitos en áreas comunitarias.\n\
 9) Ver el índice de criminalidad por áreas.\n\
 10) Mostrar y ordenar los delitos existentes.\n\
@@ -351,59 +348,58 @@ def cargar_historico_comisarias():
     agregar_comisaria("Rogers Park", 41.999763, -87.671324)
 
 # Función para establecer las coordenadas para el mapa.
-def establecer_coordenadas_mapa(par_latitud_mapa = None, par_longitud_mapa = None, par_zoom_start = None):
-    if par_latitud_mapa is None:
-        latitud_mapa = float(input("Introduce unas coordenadas de latitud para establecer un mapa: "))
-    else:
-        latitud_mapa = par_latitud_mapa
+def ver_mapa():
+    # Creamos un mapa centrado en una ubicación por defecto
+    mapa = folium.Map()
 
-    if par_longitud_mapa is None:
-        longitud_mapa = float(input("Introduce unas coordenadas de longitud para establecer un mapa: "))
-    else:
-        longitud_mapa = par_longitud_mapa
+    # Obtenemos las ubicaciones de las comisarías desde la base de datos.
+    ubicaciones_comisarias = mysql_consultas_datos.coordenadas_comisarias()
 
-    if par_zoom_start is None:
-        zoom_start = int(input("Introduce el zoom para visualizar el mapa: "))
-    else:
-        zoom_start = par_zoom_start
+    # Obtenemos las ubicaciones de los delitos desde la base de datos.
+    ubicaciones_delitos = mysql_consultas_datos.coordenadas_delitos()
 
-    # Definimos las variables mapa, mapa_delitos_cometidos y mapa_comisarias.
-    mapa = folium.Map(location = [float(latitud_mapa), float(longitud_mapa)], zoom_start = int(zoom_start))
-    # Llamamos a la función marcador_comisaria() y marcador_delito().
-    marcador_comisaria(mapa, comisarias)
-    marcador_delito(mapa, delitos)
+    # Llamamos a la función para agregar marcadores de comisarías al mapa.
+    marcador_comisarias(mapa, ubicaciones_comisarias)
 
-   # Guardamos el mapa como un archivo HTML
+    # Llamamos a la función para agregar marcadores de delitos al mapa.
+    marcador_delitos(mapa, ubicaciones_delitos)
+
+    # Creamos un mapa centrado en todas las ubicaciones.
+    todas_ubicaciones = ubicaciones_comisarias + ubicaciones_delitos
+    if todas_ubicaciones:
+        mapa.fit_bounds([ubicacion[:2] for ubicacion in todas_ubicaciones])
+
+    # Guardamos el mapa como un archivo HTML
     mapa_html = "mapa_delitos_comisarias.html"
     mapa.save(mapa_html)
-    
+
     # Abrir automáticamente el archivo en el navegador web predeterminado
     print("Aquí tienes el mapa con las comisarías y delitos existentes: ")
     webbrowser.open(os.path.abspath(mapa_html))
 
-    return print("Mira la pagina que abrio en tu navegador")
+    print("Mira la página que se abrió en tu navegador")
 
-# Función para trabajar con los marcadores de comisarías.
-def marcador_comisaria(mapa, comisarias):
-    for comisaria in comisarias:
+def marcador_comisarias(mapa, ubicaciones):
+    for ubicacion in ubicaciones:
+        lat, lon, nombre = ubicacion
         folium.Marker(
-            location = [comisaria["Coordenadas"]["Latitud"], comisaria["Coordenadas"]["Longitud"]],
-            popup = comisaria["Nombre del Distrito"],
-            icon = folium.Icon(color = "blue")
+            location=[lat, lon],
+            popup=nombre,
+            icon=folium.Icon(color='blue')
         ).add_to(mapa)
 
-# Función para trabajar con los marcadores de los delitos cometidos.
-def marcador_delito(mapa, delitos):
-    for delito in delitos:
+def marcador_delitos(mapa, ubicaciones):
+    for ubicacion in ubicaciones:
+        lat, lon, texto = ubicacion
         folium.Marker(
-            location = [delito["Coordenadas"]["Latitud"], delito["Coordenadas"]["Longitud"]],
-            popup = (f"{delito['Núm. caso']}: {delito['Descripción']}"),
-            icon = folium.Icon(color = "red")
+            location=[lat, lon],
+            popup=texto,
+            icon=folium.Icon(color='red')
         ).add_to(mapa)
 
 # Función para cargar las coordenadas ya existentes.
 def consultar_mapa_registrado():
-    establecer_coordenadas_mapa(41.864389, -87.672638, 10)
+    establecer_coordenadas_mapa()
 
 
 # ---------------------------------------- EJERCICIO 3 DEL RETO -------------------------------------------
