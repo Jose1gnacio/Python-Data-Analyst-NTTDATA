@@ -166,7 +166,132 @@ def editar_delito():
             cursor.close()
             conexion.close()
 
+# Función para listar comisarias
+def mostrar_todas_las_comisarias():
+    try:
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="chicago_safety_data"
+        )
+        cursor = conexion.cursor()
+
+        # Consulta SQL para seleccionar todas las comisarías
+        consulta = "SELECT * FROM comisarias"
+        cursor.execute(consulta)
+
+        # Obtener todas las filas de resultados
+        comisarias = cursor.fetchall()
+
+        if not comisarias:
+            print("No hay comisarías registradas en la base de datos.")
+        else:
+            # Imprimir información de todas las comisarías
+            print("Lista de Comisarías:")
+            for comisaria in comisarias:
+                print(f"""
+                Nombre: {comisaria[1]}
+                Área Comunitaria: {comisaria[2]}
+                Dirección: {comisaria[3]}
+                Teléfono: {comisaria[4]}
+                Latitud: {comisaria[5]}
+                Longitud: {comisaria[6]}
+                """)
+               
+
+    except mysql.connector.Error as error:
+        print("Error al conectar a la base de datos:", error)
+
+    finally:
+        if conexion.is_connected():
+            cursor.close()
+            conexion.close()
    
+# Función para listar hospitales
+def mostrar_todos_los_hospitales():
+    try:
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="chicago_safety_data"
+        )
+        cursor = conexion.cursor()
+
+        # Consulta SQL para seleccionar todos los hospitales
+        consulta = "SELECT * FROM hospitales"
+        cursor.execute(consulta)
+
+        # Obtener todas las filas de resultados
+        hospitales = cursor.fetchall()
+
+        if not hospitales:
+            print("No hay hospitales registrados en la base de datos.")
+        else:
+            # Imprimir información de todos los hospitales
+            print("Lista de Hospitales:")
+            for hospital in hospitales:
+                print(f"""
+                Nombre: {hospital[1]}
+                Área Comunitaria: {hospital[2]}
+                Dirección: {hospital[3]}
+                Teléfono: {hospital[4]}
+                Latitud: {hospital[5]}
+                Longitud: {hospital[6]}
+                """)               
+
+    except mysql.connector.Error as error:
+        print("Error al conectar a la base de datos:", error)
+
+    finally:
+        if conexion.is_connected():
+            cursor.close()
+            conexion.close()
+
+# Función para listar todas las áreas comunitarias
+def mostrar_areas_comunitarias():
+    try:
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="chicago_safety_data"
+        )
+        cursor = conexion.cursor()
+
+        # Consulta SQL para seleccionar todas las áreas comunitarias
+        consulta = "SELECT * FROM areas_comunitarias"
+        cursor.execute(consulta)
+
+        # Obtener todas las filas de resultados
+        areas_comunitarias = cursor.fetchall()
+
+        if not areas_comunitarias:
+            print("No hay áreas comunitarias registradas en la base de datos.")
+        else:
+            # Imprimir información de todas las áreas comunitarias
+            print("Lista de Áreas Comunitarias:")
+            for area_comunitaria in areas_comunitarias:
+                print(f"""
+                Nombre: {area_comunitaria[1]}
+                AÑo: {area_comunitaria[2]}
+                Pobalción: {area_comunitaria[3]}
+                Ingresos: {area_comunitaria[4]}
+                Latinos: {area_comunitaria[5]}
+                Negros: {area_comunitaria[6]}
+                Blancos: {area_comunitaria[6]}
+                Asiáticos: {area_comunitaria[6]}
+                Otros: {area_comunitaria[6]}
+                """)                
+
+    except mysql.connector.Error as error:
+        print("Error al conectar a la base de datos:", error)
+
+    finally:
+        if conexion.is_connected():
+            cursor.close()
+            conexion.close()
 
 
 #if __name__ == "__main__":
