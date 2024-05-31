@@ -369,6 +369,196 @@ def coordenadas_delitos():
 
     return ubicaciones_delitos
 
+# Función para ordenar delitos de manera ascendente
+def mostrar_delitos_asc():
+    try:
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="chicago_safety_data"
+        )
+        cursor = conexion.cursor()
+
+        # Consulta SQL para obtener todos los delitos ordenados por fecha de manera ascendente
+        consulta = '''
+            SELECT * FROM delitos
+            ORDER BY fecha ASC
+        '''
+
+        # Ejecutar la consulta
+        cursor.execute(consulta)
+
+        # Obtener resultados de la consulta
+        resultados = cursor.fetchall()
+
+        # Imprimir los resultados
+        if resultados:
+            print("Listado de todos los delitos ordenados por fecha de manera ascendente:")
+            for resultado in resultados:
+                print(f"""
+                Número de caso: {resultado[1]}
+                Descripción: {resultado[2]}
+                Arrestado: {resultado[3]}
+                Área comunitaria: {resultado[4]}
+                Cuadra: {resultado[5]}
+                Fecha: {resultado[6]}
+                Latitud: {resultado[7]}
+                Longitud: {resultado[8]}
+                """)
+        else:
+            print("\nNo se encontraron delitos en la base de datos.\n")
+
+    except mysql.connector.Error as error:
+        print("Error al conectar a la base de datos:", error)
+
+    finally:
+        if conexion.is_connected():
+            cursor.close()
+            conexion.close()
+
+# Función para ordenar delitos de manera descendente
+def mostrar_delitos_desc():
+    try:
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="chicago_safety_data"
+        )
+        cursor = conexion.cursor()
+
+        # Consulta SQL para obtener todos los delitos ordenados por fecha de manera ascendente
+        consulta = '''
+            SELECT * FROM delitos
+            ORDER BY fecha DESC
+        '''
+
+        # Ejecutar la consulta
+        cursor.execute(consulta)
+
+        # Obtener resultados de la consulta
+        resultados = cursor.fetchall()
+
+        # Imprimir los resultados
+        if resultados:
+            print("Listado de todos los delitos ordenados por fecha de manera ascendente:")
+            for resultado in resultados:
+                print(f"""
+                Número de caso: {resultado[1]}
+                Descripción: {resultado[2]}
+                Arrestado: {resultado[3]}
+                Área comunitaria: {resultado[4]}
+                Cuadra: {resultado[5]}
+                Fecha: {resultado[6]}
+                Latitud: {resultado[7]}
+                Longitud: {resultado[8]}
+                """)
+        else:
+            print("\nNo se encontraron delitos en la base de datos.\n")
+
+    except mysql.connector.Error as error:
+        print("Error al conectar a la base de datos:", error)
+
+    finally:
+        if conexion.is_connected():
+            cursor.close()
+            conexion.close()
+
+# Función para devolver orden asc para calculo tiempo entre delitos
+def delitos_asc_retorno():
+    try:
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="chicago_safety_data"
+        )
+        cursor = conexion.cursor()
+
+        # Consulta SQL para obtener todos los delitos ordenados por fecha de manera ascendente
+        consulta = '''
+            SELECT * FROM delitos
+            ORDER BY fecha ASC
+        '''
+
+        # Ejecutar la consulta
+        cursor.execute(consulta)
+
+        # Obtener resultados de la consulta
+        resultados = cursor.fetchall()
+
+        # Lista para almacenar los resultados como diccionarios
+        lista_delitos = []
+
+        # Verificar si se encontraron resultados
+        if resultados:
+            for resultado in resultados:
+                # Crear un diccionario para cada delito
+                delito = {
+                    "Núm. caso": resultado[1],
+                    "Descripción": resultado[2],
+                    "Arrestado": resultado[3],
+                    "Área comunitaria": resultado[4],
+                    "Cuadra": resultado[5],
+                    "Fecha": resultado[6],
+                    "Latitud": resultado[7],
+                    "Longitud": resultado[8]
+                }
+                lista_delitos.append(delito)
+
+        return lista_delitos
+
+    except mysql.connector.Error as error:
+        print("Error al conectar a la base de datos:", error)
+        return []
+
+    finally:
+        if conexion.is_connected():
+            cursor.close()
+            conexion.close()
+
+# prueba
+def coordenadas_delitos2():
+    ubicaciones_delitos = []
+
+    try:
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="chicago_safety_data"
+        )
+        cursor = conexion.cursor()
+
+        # Consulta SQL para obtener todos los delitos
+        consulta = '''
+            SELECT num_caso, descripcion, latitud, longitud FROM delitos
+        '''
+        cursor.execute(consulta)
+
+        # Obtener resultados de la consulta
+        delitos = cursor.fetchall()
+
+        if delitos:
+            for delito in delitos:
+                if len(delito) == 4:  # Verificar que la tupla tiene 4 elementos
+                    num_caso, descripcion, latitud, longitud = delito
+                    if latitud and longitud:  # Verificar que latitud y longitud no sean nulos
+                        ubicaciones_delitos.append((num_caso, descripcion, latitud, longitud))
+                else:
+                    print(f"Advertencia: El delito {delito} no tiene suficientes datos.")
+
+    except mysql.connector.Error as error:
+        print("Error al conectar a la base de datos:", error)
+
+    finally:
+        if conexion.is_connected():
+            cursor.close()
+            conexion.close()
+
+    return ubicaciones_delitos
+
 #if __name__ == "__main__":
     #editar_delito()
     #buscar_delitos_por_valor()

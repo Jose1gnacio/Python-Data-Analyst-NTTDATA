@@ -22,13 +22,12 @@ proceso_comisarias = 3
 proceso_hospitales = 4
 proceso_areas_comunitarias = 5
 proceso_mapa = 6
-proceso_coordenadas = 7
-proceso_agregar_areas_con_delitos = 8
-proceso_indice_criminalidad = 9
-proceso_ordenar_delitos = 10
-proceso_tiempo_entre_delitos = 11
-proceso_comisaria_entre_delitos = 12
-proceso_cerrar_app = 13
+proceso_agregar_areas_con_delitos = 7
+proceso_indice_criminalidad = 8
+proceso_ordenar_delitos = 9
+proceso_tiempo_entre_delitos = 10
+proceso_comisarias_cercanas_a_delitos = 11
+proceso_cerrar_app = 12
 
 delitos = []                                # Lista de los delitos cometidos.
 comisarias = []                             # Lista de las comisarias.
@@ -130,14 +129,14 @@ Introduce el número que corresponda con la opción escogida: "))
 - 2) De más reciente a más antiguo.\n\
 Introduce el número que corresponda con la opción escogida: "))
         if opcion_orden == 1:
-            ordenar_delitos_ascendente(delitos)
+            mysql_consultas_datos.mostrar_delitos_asc()
         elif opcion_orden == 2:
-            ordenar_delitos_descendente(delitos)
+            mysql_consultas_datos.mostrar_delitos_desc()
         else:
             opcion_orden = input("Elige una opción válida. Introduce el número que corresponda con la opción escogida: ")
     elif proceso == proceso_tiempo_entre_delitos:
-        calcular_tiempo_entre_delitos(delitos)
-    elif proceso == proceso_comisaria_entre_delitos:
+        calcular_tiempo_entre_delitos()
+    elif proceso == proceso_comisarias_cercanas_a_delitos:
         encontrar_comisaria_mas_cercana()
     else:
         cerrar_sesion()
@@ -145,7 +144,7 @@ Introduce el número que corresponda con la opción escogida: "))
 # Función para el menú.
 def main():
     # Mediante la siguiente función precargamos el histórico de delitos, de comisarías y de áreas delictivas.
-    cargar_historico_delitos()
+    
     cargar_historico_comisarias()
     cargar_historico_delitos_areas()
 
@@ -158,16 +157,16 @@ def main():
 4) Hospitales.\n\
 5) Áreas comunitarias.\n\
 6) Ver mapa de delitos y comisarias.\n\
-8) Agregar datos sobre delitos en áreas comunitarias.\n\
-9) Ver el índice de criminalidad por áreas.\n\
-10) Mostrar y ordenar los delitos existentes.\n\
-11) Calcular el tiempo entre delitos.\n\
-12) Comprobar cuál es la comisaría más cercana a cada delito.\n\
-13) Cerrar sesión.\n\
+7) Agregar datos sobre delitos en áreas comunitarias.\n\
+8) Ver el índice de criminalidad por áreas.\n\
+9) Mostrar y ordenar los delitos existentes.\n\
+10) Calcular el tiempo entre delitos.\n\
+11) Comprobar cuál es la comisaría más cercana a cada delito.\n\
+12) Cerrar sesión.\n\
 \nIntroduce el número que corresponda con la opción escogida: "))
         controlador(proceso)
 
-        if proceso == 13:
+        if proceso == 12:
             continuar = False
         else:
             respuesta = input("¿Desea hacer algo más? (SI/NO): ").strip().lower()
@@ -180,133 +179,16 @@ def main():
 def cerrar_sesion():
     print("Ha cerrado la sesión correctamente.")
 
-# ------------------------------------------ EJERCICIO 1 DEL RETO -------------------------------------------
+# ------------------------------------------ FUNCIONES PARA EL CONTROLADOR -------------------------------------------
 # Función para agregar delito.
-def agregar_delito(par_num_caso = None, par_descripcion = None, par_arrestado = None, par_num_area_comunitaria = None,
-                   par_cuadra = None, par_fecha = None, par_latitud_delito = None, par_longitud_delito = None):
-    if par_num_caso is None:
-        num_caso = input("Núm. caso: ")
-    else:
-        num_caso = par_num_caso
-
-    if par_descripcion is None:
-        descripcion = input("Descripción: ")
-    else:
-        descripcion = par_descripcion
-
-    if par_arrestado is None:
-        arrestado = input("Arrestado (True/False): ").strip().lower() == 'true'
-    else:
-        arrestado = par_arrestado
-
-    if par_num_area_comunitaria is None:
-        num_area_comunitaria = int(input("Núm. área comunitaria: "))
-    else:
-        num_area_comunitaria = par_num_area_comunitaria
-
-    if par_cuadra is None:
-        cuadra = input("Cuadra: ")
-    else:
-        cuadra = par_cuadra
-
-    if par_fecha is None:
-        fecha = input("Fecha (YYYY-MM-DD HH:MM:SS): ")
-    else:
-        fecha = par_fecha
-
-    if par_latitud_delito is None:
-        latitud_delito = float(input("Latitud: "))
-    else:
-        latitud_delito = par_latitud_delito
-
-    if par_longitud_delito is None:
-        longitud_delito = float(input("Longitud: "))
-    else:
-        longitud_delito = par_longitud_delito
-
-    # Declaramos la variable nuevo_delito como un diccionario que pueda almacenar los nuevos datos introducidos por el usuario.
-    nuevo_delito = {
-        "Núm. caso": num_caso,
-        "Descripción": descripcion,
-        "Arrestado": arrestado,
-        "Núm. área comunitaria": num_area_comunitaria,
-        "Cuadra": cuadra,
-        "Fecha": fecha,
-        "Coordenadas": {
-            "Latitud": latitud_delito,
-            "Longitud": longitud_delito
-        }
-    }
-
-    # Agregamos los datos del nuevo delito a la lista de delitos existente mediante el método append().
-    delitos.append(nuevo_delito)
-    return nuevo_delito
 
 # Función para cargar el histórico de los delitos registrados.
-def cargar_historico_delitos():
-    agregar_delito("HY411648", "Maltrato doméstico", False, 61, "043XX S WOOD ST", "2015-09-05 13:30:00", 41.937406, -87.670000)
-    agregar_delito("HY411595", "Tráfico de drogas", True, 21, "035XX W BARRY AVE", "2015-09-05 12:45:00", 41.815117, -87.716650)
-    agregar_delito("HY411435", "Robo en casa", False, 71, "082XX S LOOMIS BLVD", "2015-09-05 10:55:00", 41.744379, -87.658431)
 
 # Función para consultar los datos de un delito.
-def consultar_delito():
-    if not delitos:
-        print("No hay delitos registrados.")
-    else:
-        num_caso = input("Por favor, introduce Núm. caso del delito que desees consultar: ")
-        for delito in delitos:
-            if delito["Núm. caso"] == num_caso:
-                print("Aquí tienes el delito solicitado: ")
-                imprimir_delito(delito)
-                return
 
 # Función para imprimir un delito.
-def imprimir_delito(delito):
-    print(f"Núm. caso: {delito['Núm. caso']}")
-    print(f"Descripción: {delito['Descripción']}")
-    print(f"Arrestado: {'Sí' if delito['Arrestado'] else 'No'}")
-    print(f"Núm. área comunitaria: {delito['Núm. área comunitaria']}")
-    print(f"Cuadra: {delito['Cuadra']}")
-    print(f"Fecha: {delito['Fecha']}")
-    print(f"Latitud: {delito['Coordenadas']['Latitud']}")
-    print(f"Longitud: {delito['Coordenadas']['Longitud']}\n")
 
 # Función para actualizar los datos de un delito.
-def modificar_delito():
-    num_caso = input("Introduce el Núm. caso del delito que quieres modificar: ")
-    for delito in delitos:
-        if delito["Núm. caso"] == num_caso:
-            dato_modificar = int(input("¿Qué dato te gustaría modificar?: \n\
-1) Descripción.\n\
-2) Arrestado.\n\
-3) Núm. area comunitaria.\n\
-4) Cuadra.\n\
-5) Fecha.\n\
-6) Latitud.\n\
-7) Longitud.\n\
-Introduce el número que corresponda con la opción escogida: "))
-
-            if dato_modificar == 1:
-                delito["Descripción"] = input("Introduce la nueva descripción del caso: ")
-            elif dato_modificar == 2:
-                delito["Arrestado"] = input("Introduce el nuevo estado de Arrestado (True/False): ").lower() == 'true'
-            elif dato_modificar == 3:
-                delito["Núm. área comunitaria"] = int(input("Introduce el nuevo Núm. área comunitaria: "))
-            elif dato_modificar == 4:
-                delito["Cuadra"] = input("Introduce la nueva Cuadra: ")
-            elif dato_modificar == 5:
-                delito["Fecha"] = input("Introduce la nueva Fecha (YYYY-MM-DD HH:MM:SS): ")
-            elif dato_modificar == 6:
-                delito["Coordenadas"]["Latitud"] = float(input("Introduce la nueva Latitud: "))
-            elif dato_modificar == 7:
-                delito["Coordenadas"]["Longitud"] = float(input("Introduce la nueva Longitud: "))
-            else:
-                dato_modificar = ("¡Ups! Ha habido un error. Introduzca una opción: ")
-            print("¡Los datos se han modificado con éxito!")
-            imprimir_delito(delito)
-            break
-        else:
-            num_caso = input("¡Ups! Algún dato es erróneo. Por favor, inténtelo de nuevo: ")
 
 # ---------------------------------------- EJERCICIO 2 DEL RETO -------------------------------------------
 # Función para agregar comisarías.
@@ -397,10 +279,6 @@ def marcador_delitos(mapa, ubicaciones):
             icon=folium.Icon(color='red')
         ).add_to(mapa)
 
-# Función para cargar las coordenadas ya existentes.
-def consultar_mapa_registrado():
-    establecer_coordenadas_mapa()
-
 
 # ---------------------------------------- EJERCICIO 3 DEL RETO -------------------------------------------
 # Función para agregar delitos por áreas.
@@ -468,32 +346,19 @@ def mostrar_indice_criminalidad():
     print(f"La media del Índice de Criminalidad es de {round(media_criminalidad, 2)} delitos.")
 
 # (Función para ordenar los delitos por fecha ascendente.
-def ordenar_delitos_ascendente(delitos):
-    for delito in delitos:
-        if type(delito["Fecha"]) is str:
-            delito["Fecha"] = datetime.strptime(delito["Fecha"], "%Y-%m-%d %H:%M:%S")
-
-    orden_por_fecha = sorted(delitos, key = lambda x: x["Fecha"])
-
-    for orden in orden_por_fecha:
-        imprimir_delito(orden)
 
 # Función para ordenar los delitos por fecha descendente.
-def ordenar_delitos_descendente(delitos):
-    for delito in delitos:
-        if type(delito["Fecha"]) is str:
-            delito["Fecha"] = datetime.strptime(delito["Fecha"], "%Y-%m-%d %H:%M:%S")
-
-    orden_por_fecha = sorted(delitos, key = lambda x: x["Fecha"], reverse = True)
-
-    for orden in orden_por_fecha:
-        imprimir_delito(orden)
 
 # Función para calcular el tiempo entre delitos.
-def calcular_tiempo_entre_delitos(delitos):
+def calcular_tiempo_entre_delitos():
     # Ordenar los delitos por fecha de forma ascendente.
-    delitos_ordenados = sorted(delitos, key=lambda x: x["Fecha"])
+    delitos_ordenados = mysql_consultas_datos.delitos_asc_retorno()
 
+    # Verificar si se obtuvieron resultados
+    if not delitos_ordenados:
+        print("No se encontraron delitos para calcular el tiempo entre ellos.")
+        return
+    
     # Guardar la primera fecha para determinar si es str o datetime.
     primera_fecha = delitos_ordenados[0]["Fecha"]
 
@@ -518,42 +383,58 @@ def calcular_tiempo_entre_delitos(delitos):
 
 # ---------------------------------------- EJERCICIO 4 DEL RETO -------------------------------------------
 # Función para transformar las coordenadas delitos de sistema geográfico al sistema proyectado.
-def convertir_coordenadas_delitos(delitos, sistema_referencia_origen, sistema_referencia_destino):
+def convertir_coordenadas_delitos():
     delitos_transformados = []
+    coordenada_delitos = mysql_consultas_datos.coordenadas_delitos()
 
-    for delito in delitos:
-        coordenadas = delito["Coordenadas"]
-        latitud = coordenadas["Latitud"]
-        longitud = coordenadas["Longitud"]
-        x, y = transformer.transform(latitud, longitud)
+    sistema_referencia_origen = "EPSG:4326"     # Sistema geográfico.
+    sistema_referencia_destino = "EPSG:26916"   # Sistema proyectado.
+    transformer = Transformer.from_crs(sistema_referencia_origen, sistema_referencia_destino)
+
+    for delito in coordenada_delitos:        
+        latitud_delitos = delito[2]
+        longitud_delitos = delito[3]
+        num_caso = delito[0]
+        descripcion = delito[1]
+
+        #Trasnformar coordenadas
+        x, y = transformer.transform(latitud_delitos, longitud_delitos)
+
         delito_transformado = {
-            "Núm. caso": delito["Núm. caso"],
-            "Descripción": delito["Descripción"],
-            "Arrestado": delito["Arrestado"],
-            "Núm. área comunitaria": delito["Núm. área comunitaria"],
-            "Cuadra": delito["Cuadra"],
-            "Fecha": delito["Fecha"],
+            "Num. caso": num_caso,
+            "Descripcion": descripcion,
             "Coordenadas geográficas": {
-                "Latitud": latitud,
-                "Longitud": longitud
+                "Latitud": latitud_delitos,
+                "Longitud": longitud_delitos
             },
             "Coordenadas proyectadas": {
                 "X": x,
                 "Y": y
             }
         }
+
         delitos_transformados.append(delito_transformado)
+        
     return delitos_transformados
 
 # Función que transforma las coordenadas comisarias de sistema geográficas a coordenadas proyectadas.
-def convertir_coordenadas_comisarias(comisarias, sistema_referencia_origen, sistema_referencia_destino):
+def convertir_coordenadas_comisarias():
     comisarias_transformadas = []
+    coordenada_comisarias = mysql_consultas_datos.coordenadas_comisarias()
+    
+    sistema_referencia_origen = "EPSG:4326"     # Sistema geográfico.
+    sistema_referencia_destino = "EPSG:26916"   # Sistema proyectado.
+    transformer = Transformer.from_crs(sistema_referencia_origen, sistema_referencia_destino)
 
-    for comisaria in comisarias:
-        latitud_comisaria = comisaria["Coordenadas"]["Latitud"]
-        longitud_comisaria = comisaria["Coordenadas"]["Longitud"]
-        nombre_comisaria = comisaria["Nombre del Distrito"]
+    for comisaria in coordenada_comisarias:
+        latitud_comisaria = comisaria[1]
+        longitud_comisaria = comisaria[2]
+        nombre_comisaria = comisaria[0]
+        
+        # Transformar las coordenadas
         x, y = transformer.transform(latitud_comisaria, longitud_comisaria)
+        
+        # Crear el diccionario transformado
         comisaria_transformada = {
             "Nombre del Distrito": nombre_comisaria,
             "Coordenadas geográficas": {
@@ -565,7 +446,10 @@ def convertir_coordenadas_comisarias(comisarias, sistema_referencia_origen, sist
                 "Y": y
             }
         }
+        
+        # Agregar el diccionario transformado a la lista
         comisarias_transformadas.append(comisaria_transformada)
+    
     return comisarias_transformadas
 
 # Función para calcular la distancia entre dos puntos.
@@ -574,8 +458,8 @@ def calcular_distancia(punto1, punto2):
 
 # Función para ncontrar la comisaría más cercana a cada delito y guardar esa comisaria en la información del delito.
 def encontrar_comisaria_mas_cercana():
-    delitos_transformados = convertir_coordenadas_delitos(delitos, sistema_referencia_origen, sistema_referencia_destino)
-    comisarias_transformadas = convertir_coordenadas_comisarias(comisarias, sistema_referencia_origen, sistema_referencia_destino)
+    delitos_transformados = convertir_coordenadas_delitos()
+    comisarias_transformadas = convertir_coordenadas_comisarias()
     resultados = []
 
     for delito in delitos_transformados:
@@ -597,12 +481,8 @@ def encontrar_comisaria_mas_cercana():
             distancia = f"{distancia_minima / 1000:.2f} kilómetros"
 
         resultados.append({
-            "Núm. caso": delito["Núm. caso"],
-            "Descripción": delito["Descripción"],
-            "Arrestado": delito["Arrestado"],
-            "Núm. área comunitaria": delito["Núm. área comunitaria"],
-            "Cuadra": delito["Cuadra"],
-            "Fecha": delito["Fecha"],
+            "Núm. caso": delito["Num. caso"],
+            "Descripción": delito["Descripcion"],
             "Coordenadas geográficas": delito["Coordenadas geográficas"],
             "Coordenadas proyectadas": delito["Coordenadas proyectadas"],
             "Comisaria más cercana": comisaria_cercana["Nombre del Distrito"],
@@ -623,4 +503,68 @@ main()
 
 
 
+def convertir_coordenadas_comisarias():
+    comisarias_transformadas = []
+    coordenada_comisarias = mysql_consultas_datos.coordenadas_comisarias()
+    
+    sistema_referencia_origen = "EPSG:4326"     # Sistema geográfico.
+    sistema_referencia_destino = "EPSG:26916"   # Sistema proyectado.
+    transformer = Transformer.from_crs(sistema_referencia_origen, sistema_referencia_destino)
 
+    for comisaria in coordenada_comisarias:
+        latitud_comisaria = comisaria[1]
+        longitud_comisaria = comisaria[2]
+        nombre_comisaria = comisaria[0]
+        
+        # Transformar las coordenadas
+        x, y = transformer.transform(latitud_comisaria, longitud_comisaria)
+        
+        # Crear el diccionario transformado
+        comisaria_transformada = {
+            "Nombre del Distrito": nombre_comisaria,
+            "Coordenadas geográficas": {
+                "Latitud": latitud_comisaria,
+                "Longitud": longitud_comisaria
+            },
+            "Coordenadas proyectadas": {
+                "X": x,
+                "Y": y
+            }
+        }
+        
+        # Agregar el diccionario transformado a la lista
+        comisarias_transformadas.append(comisaria_transformada)
+    
+    return comisarias_transformadas
+
+def convertir_coordenadas_delitos():
+    delitos_transformados = []
+    coordenada_delitos = mysql_consultas_datos.coordenadas_delitos()
+
+    sistema_referencia_origen = "EPSG:4326"     # Sistema geográfico.
+    sistema_referencia_destino = "EPSG:26916"   # Sistema proyectado.
+    transformer = Transformer.from_crs(sistema_referencia_origen, sistema_referencia_destino)
+
+    for delito in coordenada_delitos:        
+        latitud_delitos = delito[2]
+        longitud_delitos = delito[3]
+        num_caso = delito[0]
+
+        #Trasnformar coordenadas
+        x, y = transformer.transform(latitud_delitos, longitud_delitos)
+
+        delito_transformado = {
+            "Num. caso": num_caso,
+            "Coordenadas geográficas": {
+                "Latitud": latitud_delitos,
+                "Longitud": longitud_delitos
+            },
+            "Coordenadas proyectadas": {
+                "X": x,
+                "Y": y
+            }
+        }
+
+        delitos_transformados.append(delito_transformado)
+
+    return delitos_transformados
