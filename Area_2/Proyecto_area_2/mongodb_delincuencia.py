@@ -260,20 +260,27 @@ def editar_criminal():
         except ValueError:
             print("Error: Verifique los datos ingresados.")
 
+#  Función para buscar por id
 def buscar_por_id():
     coleccion = conectar_mongodb()
     if coleccion is not None:
-        descripcion_delito = int(input("Ingrese el id: "))
         try:
-            # Utilizamos una consulta en la colección para encontrar los registros que contengan el delito especificado
-            delitos_encontrados = coleccion.find({'_id': descripcion_delito})
+            id_buscado = int(input("Ingrese el ID que desea buscar: "))
 
-            # Mostramos los delitos encontrados            
-            print(delitos_encontrados)
+            # Utilizamos find_one() en lugar de find() para obtener un solo documento
+            delito_encontrado = coleccion.find_one({'_id': id_buscado})
+
+            if delito_encontrado:
+                print("Delito encontrado:")
+                print(delito_encontrado)
+            else:
+                print("No se encontró ningún delito con el ID proporcionado.")
+        except ValueError:
+            print("Error: Ingrese un ID válido.")
         except Exception as e:
             print("Error al buscar el delito:", e)
 
 if __name__ == "__main__":
     #obtener_proximo_id()
-    editar_criminal()
-    #buscar_por_id()
+    #editar_criminal()
+    buscar_por_id()

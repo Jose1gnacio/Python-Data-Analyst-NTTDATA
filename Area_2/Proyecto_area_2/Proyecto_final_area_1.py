@@ -80,7 +80,7 @@ Introduce el número que corresponda con la opción escogida: "))
         elif opcion_orden == 5:
             mongodb_delincuencia.agregar_criminal()
         elif opcion_orden == 6:
-            mongodb_delincuencia.buscar_por_estatura_peso()#falta
+            mongodb_delincuencia.editar_criminal()()
         else:
             opcion_orden = input("Elige una opción válida. Introduce el número que corresponda con la opción escogida: ")
 
