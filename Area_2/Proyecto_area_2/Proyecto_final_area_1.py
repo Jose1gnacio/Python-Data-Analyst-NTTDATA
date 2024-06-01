@@ -78,7 +78,7 @@ Introduce el número que corresponda con la opción escogida: "))
         elif opcion_orden == 4:
             mongodb_delincuencia.mostrar_todos_los_criminales()
         elif opcion_orden == 5:
-            mongodb_delincuencia.buscar_por_estatura_peso()#falta
+            mongodb_delincuencia.agregar_criminal()
         elif opcion_orden == 6:
             mongodb_delincuencia.buscar_por_estatura_peso()#falta
         else:
@@ -180,17 +180,7 @@ def cerrar_sesion():
     print("Ha cerrado la sesión correctamente.")
 
 # ------------------------------------------ FUNCIONES PARA EL CONTROLADOR -------------------------------------------
-# Función para agregar delito.
 
-# Función para cargar el histórico de los delitos registrados.
-
-# Función para consultar los datos de un delito.
-
-# Función para imprimir un delito.
-
-# Función para actualizar los datos de un delito.
-
-# ---------------------------------------- EJERCICIO 2 DEL RETO -------------------------------------------
 # Función para agregar comisarías.
 def agregar_comisaria(par_nombre_comisaria = None, par_latitud_comisaria = None, par_longitud_comisaria = None):
     if par_nombre_comisaria is None:
@@ -280,7 +270,6 @@ def marcador_delitos(mapa, ubicaciones):
         ).add_to(mapa)
 
 
-# ---------------------------------------- EJERCICIO 3 DEL RETO -------------------------------------------
 # Función para agregar delitos por áreas.
 def agregar_delitos_area(par_area = None, par_numero_delitos = None, par_poblacion = None):
     if par_area is None:
@@ -381,31 +370,27 @@ def calcular_tiempo_entre_delitos():
         num_caso_anterior = delitos_ordenados[i - 1]["Núm. caso"]
         print(f"El tiempo entre el caso número {num_caso_anterior} y el caso número {num_caso_actual} es de {tiempo_en_minutos:.1f} minutos \n")
 
-# ---------------------------------------- EJERCICIO 4 DEL RETO -------------------------------------------
+
 # Función para transformar las coordenadas delitos de sistema geográfico al sistema proyectado.
 def convertir_coordenadas_delitos():
     delitos_transformados = []
-    coordenada_delitos = mysql_consultas_datos.coordenadas_delitos()
+    ubicaciones_delitos = mysql_consultas_datos.coordenadas_delitos()
 
     sistema_referencia_origen = "EPSG:4326"     # Sistema geográfico.
     sistema_referencia_destino = "EPSG:26916"   # Sistema proyectado.
     transformer = Transformer.from_crs(sistema_referencia_origen, sistema_referencia_destino)
 
-    for delito in coordenada_delitos:        
-        latitud_delitos = delito[2]
-        longitud_delitos = delito[3]
-        num_caso = delito[0]
-        descripcion = delito[1]
-
+    for delito in ubicaciones_delitos:
+        latitud, longitud, num_caso = delito    
+        
         #Trasnformar coordenadas
-        x, y = transformer.transform(latitud_delitos, longitud_delitos)
+        x, y = transformer.transform(latitud, longitud)
 
         delito_transformado = {
             "Num. caso": num_caso,
-            "Descripcion": descripcion,
             "Coordenadas geográficas": {
-                "Latitud": latitud_delitos,
-                "Longitud": longitud_delitos
+                "Latitud": latitud,
+                "Longitud": longitud
             },
             "Coordenadas proyectadas": {
                 "X": x,
@@ -414,32 +399,30 @@ def convertir_coordenadas_delitos():
         }
 
         delitos_transformados.append(delito_transformado)
-        
+
     return delitos_transformados
 
 # Función que transforma las coordenadas comisarias de sistema geográficas a coordenadas proyectadas.
 def convertir_coordenadas_comisarias():
     comisarias_transformadas = []
-    coordenada_comisarias = mysql_consultas_datos.coordenadas_comisarias()
+    ubicaciones_comisarias = mysql_consultas_datos.coordenadas_comisarias()
     
     sistema_referencia_origen = "EPSG:4326"     # Sistema geográfico.
     sistema_referencia_destino = "EPSG:26916"   # Sistema proyectado.
     transformer = Transformer.from_crs(sistema_referencia_origen, sistema_referencia_destino)
 
-    for comisaria in coordenada_comisarias:
-        latitud_comisaria = comisaria[1]
-        longitud_comisaria = comisaria[2]
-        nombre_comisaria = comisaria[0]
-        
+    for comisaria in ubicaciones_comisarias:
+        latitud, longitud, nombre = comisaria
+              
         # Transformar las coordenadas
-        x, y = transformer.transform(latitud_comisaria, longitud_comisaria)
+        x, y = transformer.transform(latitud, longitud)
         
         # Crear el diccionario transformado
         comisaria_transformada = {
-            "Nombre del Distrito": nombre_comisaria,
+            "Nombre del Distrito": nombre,
             "Coordenadas geográficas": {
-                "Latitud": latitud_comisaria,
-                "Longitud": longitud_comisaria
+                "Latitud": latitud,
+                "Longitud": longitud
             },
             "Coordenadas proyectadas": {
                 "X": x,
@@ -449,6 +432,7 @@ def convertir_coordenadas_comisarias():
         
         # Agregar el diccionario transformado a la lista
         comisarias_transformadas.append(comisaria_transformada)
+    
     
     return comisarias_transformadas
 
@@ -481,8 +465,7 @@ def encontrar_comisaria_mas_cercana():
             distancia = f"{distancia_minima / 1000:.2f} kilómetros"
 
         resultados.append({
-            "Núm. caso": delito["Num. caso"],
-            "Descripción": delito["Descripcion"],
+            "Num. caso": delito["Num. caso"],
             "Coordenadas geográficas": delito["Coordenadas geográficas"],
             "Coordenadas proyectadas": delito["Coordenadas proyectadas"],
             "Comisaria más cercana": comisaria_cercana["Nombre del Distrito"],
@@ -491,9 +474,8 @@ def encontrar_comisaria_mas_cercana():
 
     # Mostramos los delitos y la comisaría más cercana
     for delito in resultados:
-        print(f"Núm. caso del delito: {delito['Núm. caso']}")
-        print(f" - Descripción del delito: {delito['Descripción']}")
-        print(f" - Comisaria más cercana al delito: {delito['Comisaria más cercana']}")
+        print(f"Núm. caso del delito: {delito['Num. caso']}")
+        print(f" - Comisaría más cercana al delito: {delito['Comisaria más cercana']}")
         print(f" - Distancia entre el delito cometido y la comisaría: {delito['Distancia a la comisaria más cercana']}")
 
 # ---------------------------------------- LLAMAMOS A MAIN -------------------------------------------
@@ -501,70 +483,4 @@ def encontrar_comisaria_mas_cercana():
 # LLamamos a main. La función main() la hemos definido para establecer un menú con el que pueda interactuar el usuario "Agente de Policía".
 main()
 
-
-
-def convertir_coordenadas_comisarias():
-    comisarias_transformadas = []
-    coordenada_comisarias = mysql_consultas_datos.coordenadas_comisarias()
-    
-    sistema_referencia_origen = "EPSG:4326"     # Sistema geográfico.
-    sistema_referencia_destino = "EPSG:26916"   # Sistema proyectado.
-    transformer = Transformer.from_crs(sistema_referencia_origen, sistema_referencia_destino)
-
-    for comisaria in coordenada_comisarias:
-        latitud_comisaria = comisaria[1]
-        longitud_comisaria = comisaria[2]
-        nombre_comisaria = comisaria[0]
-        
-        # Transformar las coordenadas
-        x, y = transformer.transform(latitud_comisaria, longitud_comisaria)
-        
-        # Crear el diccionario transformado
-        comisaria_transformada = {
-            "Nombre del Distrito": nombre_comisaria,
-            "Coordenadas geográficas": {
-                "Latitud": latitud_comisaria,
-                "Longitud": longitud_comisaria
-            },
-            "Coordenadas proyectadas": {
-                "X": x,
-                "Y": y
-            }
-        }
-        
-        # Agregar el diccionario transformado a la lista
-        comisarias_transformadas.append(comisaria_transformada)
-    
-    return comisarias_transformadas
-
-def convertir_coordenadas_delitos():
-    delitos_transformados = []
-    coordenada_delitos = mysql_consultas_datos.coordenadas_delitos()
-
-    sistema_referencia_origen = "EPSG:4326"     # Sistema geográfico.
-    sistema_referencia_destino = "EPSG:26916"   # Sistema proyectado.
-    transformer = Transformer.from_crs(sistema_referencia_origen, sistema_referencia_destino)
-
-    for delito in coordenada_delitos:        
-        latitud_delitos = delito[2]
-        longitud_delitos = delito[3]
-        num_caso = delito[0]
-
-        #Trasnformar coordenadas
-        x, y = transformer.transform(latitud_delitos, longitud_delitos)
-
-        delito_transformado = {
-            "Num. caso": num_caso,
-            "Coordenadas geográficas": {
-                "Latitud": latitud_delitos,
-                "Longitud": longitud_delitos
-            },
-            "Coordenadas proyectadas": {
-                "X": x,
-                "Y": y
-            }
-        }
-
-        delitos_transformados.append(delito_transformado)
-
-    return delitos_transformados
+# ---------------------------------------- FIN DEL PROGRAMA -------------------------------------------

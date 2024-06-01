@@ -1,4 +1,5 @@
 import mysql.connector
+from pyproj import Transformer
 
 # Función consulta delitos
 def buscar_delitos_por_valor():
@@ -346,7 +347,7 @@ def coordenadas_delitos():
 
         # Consulta SQL para obtener todos los delitos
         consulta = '''
-            SELECT num_caso, descripcion, latitud, longitud FROM delitos
+            SELECT num_caso, latitud, longitud FROM delitos
         '''
         cursor.execute(consulta)
 
@@ -355,9 +356,9 @@ def coordenadas_delitos():
 
         if delitos:
             for delito in delitos:
-                num_caso, descripcion, latitud, longitud = delito
+                num_caso, latitud, longitud = delito
                 if latitud and longitud:  # Verificar que latitud y longitud no sean nulos
-                    ubicaciones_delitos.append((float(latitud), float(longitud), f"Núm caso: {num_caso}\n{descripcion}"))
+                    ubicaciones_delitos.append((float(latitud), float(longitud), num_caso))
 
     except mysql.connector.Error as error:
         print("Error al conectar a la base de datos:", error)
@@ -518,47 +519,10 @@ def delitos_asc_retorno():
             cursor.close()
             conexion.close()
 
-# prueba
-def coordenadas_delitos2():
-    ubicaciones_delitos = []
 
-    try:
-        conexion = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="",
-            database="chicago_safety_data"
-        )
-        cursor = conexion.cursor()
-
-        # Consulta SQL para obtener todos los delitos
-        consulta = '''
-            SELECT num_caso, descripcion, latitud, longitud FROM delitos
-        '''
-        cursor.execute(consulta)
-
-        # Obtener resultados de la consulta
-        delitos = cursor.fetchall()
-
-        if delitos:
-            for delito in delitos:
-                if len(delito) == 4:  # Verificar que la tupla tiene 4 elementos
-                    num_caso, descripcion, latitud, longitud = delito
-                    if latitud and longitud:  # Verificar que latitud y longitud no sean nulos
-                        ubicaciones_delitos.append((num_caso, descripcion, latitud, longitud))
-                else:
-                    print(f"Advertencia: El delito {delito} no tiene suficientes datos.")
-
-    except mysql.connector.Error as error:
-        print("Error al conectar a la base de datos:", error)
-
-    finally:
-        if conexion.is_connected():
-            cursor.close()
-            conexion.close()
-
-    return ubicaciones_delitos
 
 #if __name__ == "__main__":
     #editar_delito()
     #buscar_delitos_por_valor()
+    #coordenadas_delitos()
+    
