@@ -126,7 +126,7 @@ def insertar_area_comunitaria():
 def agregar_comisaria():
     # Solicitar datos al usuario
     nombre = input("Nombre de la Comisaria: ")
-    area_comunitaria = input("Número del Area comunitaria: ")
+    area_comunitaria = int(input("Número del Area comunitaria: "))
     direccion = input("Dirección: ")
     telefono = input("Telefono: ")
     latitud = input("Latitud: ")
