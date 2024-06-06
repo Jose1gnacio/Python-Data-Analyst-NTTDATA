@@ -56,7 +56,7 @@ print(data) """
 #3.1.7
 import numpy as np
 
-ruta_archivo = 'puntos_de_acceso_wifi_Mexico.csv'
+ruta_archivo = 'C:/Users/josei/Desktop/puntos_de_acceso_wifi_Mexico.csv'
 
 # Cargar el archivo CSV con NumPy
 data = np.genfromtxt(ruta_archivo, delimiter=',', dtype=None, encoding='utf-8', names=True)
