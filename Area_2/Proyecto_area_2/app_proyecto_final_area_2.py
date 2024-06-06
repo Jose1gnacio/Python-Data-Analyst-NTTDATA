@@ -15,22 +15,21 @@ import mysql_consultas_datos
 import mongodb_delincuencia
 
 
-# Vvariables para el menú que controla los procesos.
+# Variables para el menú que controla los procesos.
 proceso_delitos = 1
 proceso_criminal = 2
 proceso_comisarias = 3
 proceso_hospitales = 4
 proceso_areas_comunitarias = 5
 proceso_mapa = 6
-proceso_agregar_areas_con_delitos = 7
-proceso_indice_criminalidad = 8
-proceso_ordenar_delitos = 9
-proceso_tiempo_entre_delitos = 10
-proceso_comisarias_cercanas_a_delitos = 11
-proceso_cerrar_app = 12
+#proceso_agregar_areas_con_delitos = 7
+#proceso_indice_criminalidad = 8
+proceso_ordenar_delitos = 7
+proceso_tiempo_entre_delitos = 8
+proceso_comisarias_cercanas_a_delitos = 9
+proceso_cerrar_app = 10
 
-delitos = []                                # Lista de los delitos cometidos.
-comisarias = []                             # Lista de las comisarias.
+
 delitos_areas = []                          # Lista de los delitos según áreas.
 
 sistema_referencia_origen = "EPSG:4326"     # Sistema geográfico.
@@ -119,10 +118,6 @@ Introduce el número que corresponda con la opción escogida: "))
 
     elif proceso == proceso_mapa:
         ver_mapa()
-    elif proceso == proceso_agregar_areas_con_delitos:
-        nuevo_delitos_area = agregar_delitos_area()
-    elif proceso == proceso_indice_criminalidad:
-        mostrar_indice_criminalidad()
     elif proceso == proceso_ordenar_delitos:
         opcion_orden = int(input("¿Cómo quieres ordenar los delitos?\n\
 - 1) De más antiguo a más reciente.\n\
@@ -145,9 +140,6 @@ Introduce el número que corresponda con la opción escogida: "))
 def main():
     # Mediante la siguiente función precargamos el histórico de delitos, de comisarías y de áreas delictivas.
     
-    cargar_historico_comisarias()
-    cargar_historico_delitos_areas()
-
     continuar = True
     while continuar:
         proceso = int(input("\n¡Hola Agente! ¿Con que información desea trabajar?\n\
@@ -157,16 +149,14 @@ def main():
 4) Hospitales.\n\
 5) Áreas comunitarias.\n\
 6) Ver mapa de delitos y comisarias.\n\
-7) Agregar datos sobre delitos en áreas comunitarias.\n\
-8) Ver el índice de criminalidad por áreas.\n\
-9) Mostrar y ordenar los delitos existentes.\n\
-10) Calcular el tiempo entre delitos.\n\
-11) Comprobar cuál es la comisaría más cercana a cada delito.\n\
-12) Cerrar sesión.\n\
+7) Mostrar y ordenar los delitos existentes.\n\
+8) Calcular el tiempo entre delitos.\n\
+9) Comprobar cuál es la comisaría más cercana a cada delito.\n\
+10) Cerrar sesión.\n\
 \nIntroduce el número que corresponda con la opción escogida: "))
         controlador(proceso)
 
-        if proceso == 12:
+        if proceso == 10:
             continuar = False
         else:
             respuesta = input("¿Desea hacer algo más? (SI/NO): ").strip().lower()
@@ -180,44 +170,6 @@ def cerrar_sesion():
     print("Ha cerrado la sesión correctamente.")
 
 # ------------------------------------------ FUNCIONES PARA EL CONTROLADOR -------------------------------------------
-
-# Función para agregar comisarías.
-def agregar_comisaria(par_nombre_comisaria = None, par_latitud_comisaria = None, par_longitud_comisaria = None):
-    if par_nombre_comisaria is None:
-        nombre_comisaria = input("Nombre del Distrito: ")
-    else:
-        nombre_comisaria = par_nombre_comisaria
-
-    if par_latitud_comisaria is None:
-        latitud_comisaria = float(input("Latitud: "))
-    else:
-        latitud_comisaria = par_latitud_comisaria
-
-    if par_longitud_comisaria is None:
-        longitud_comisaria = float(input("Longitud: "))
-    else:
-        longitud_comisaria = par_longitud_comisaria
-
-    # Declaramos la variable nueva_comisaria como un diccionario que pueda almacenar los nuevos datos introducidos por el usuario.
-    nueva_comisaria = {
-        "Nombre del Distrito": nombre_comisaria,
-        "Coordenadas": {
-            "Latitud": latitud_comisaria,
-            "Longitud": longitud_comisaria
-        }
-    }
-
-    # Agregamos los datos de la nueva comisaria a la lista de comisarias existente mediante el método append().
-    comisarias.append(nueva_comisaria)
-    return nueva_comisaria
-
-# Función para cargar datos del histórico de las comisarías.
-def cargar_historico_comisarias():
-    agregar_comisaria("Near North", 41.903242, -87.643352)
-    agregar_comisaria("Town Hall", 41.947400, -87.651512)
-    agregar_comisaria("Lincoln", 41.979550, -87.692845)
-    agregar_comisaria("Morgan Park", 41.691435, -87.668520)
-    agregar_comisaria("Rogers Park", 41.999763, -87.671324)
 
 # Función para establecer las coordenadas para el mapa.
 def ver_mapa():
@@ -268,75 +220,6 @@ def marcador_delitos(mapa, ubicaciones):
             popup=texto,
             icon=folium.Icon(color='red')
         ).add_to(mapa)
-
-
-# Función para agregar delitos por áreas.
-def agregar_delitos_area(par_area = None, par_numero_delitos = None, par_poblacion = None):
-    if par_area is None:
-        area = input("Introduce el área correspondiente: ")
-    else:
-        area = par_area
-
-    if par_numero_delitos is None:
-        numero_delitos = int(input("Introduce el número de delitos: "))
-    else:
-        numero_delitos = par_numero_delitos
-
-    if par_poblacion is None:
-        poblacion = int(input("Introduce el número de población: "))
-    else:
-        poblacion = par_poblacion
-
-    # Declaramos la variable nuevo_delitos_áreas como un diccionario que pueda almacenar los nuevos datos introducidos por el usuario.
-    nuevo_delitos_area = {
-        "Área correspondiente": area,
-        "Número de delitos": numero_delitos,
-        "Población": poblacion
-    }
-
-    # Agregamos los datos de la nueva comisaria a la lista de comisarias existente mediante el método append().
-    delitos_areas.append(nuevo_delitos_area)
-    return nuevo_delitos_area
-
-# Función para cargar el histórico de delitos por áreas.
-def cargar_historico_delitos_areas():
-    agregar_delitos_area("Área 1", 289, 54991)
-    agregar_delitos_area("Área 2", 228, 71942)
-    agregar_delitos_area("Área 3", 319, 56362)
-    agregar_delitos_area("Área 4", 141, 39493)
-    agregar_delitos_area("Área 5", 5, 0)
-
-# Función para calcular el índice de criminalidad.
-def calcular_indice_criminalidad(delitos_areas):
-    indices_criminalidad = []
-    for i in delitos_areas:
-        numero_delitos = i["Número de delitos"]
-        poblacion = i["Población"]
-        if poblacion == 0:
-            continue
-        calculo_indice = (numero_delitos / poblacion) * 100000
-        indices_criminalidad.append(round(calculo_indice, 2))
-        print(f"El índice de criminalidad del {i['Área correspondiente']} es de {round(calculo_indice, 2)} delitos.")
-    return indices_criminalidad
-
-# Función para mostrar el índice de criminalidad calculado.
-def mostrar_indice_criminalidad():
-    print("A continuación, se muestra el Índice de Criminalidad por cada 100.000 habitantes: ")
-    indices_criminalidad = calcular_indice_criminalidad(delitos_areas)
-
-    # Calcular el valor máximo, el valor mínimo y la media de los resultados.
-    maximo_criminalidad = max(indices_criminalidad)
-    minimo_criminalidad = min(indices_criminalidad)
-    media_criminalidad = sum(indices_criminalidad) / len(indices_criminalidad)
-
-    # Mostrar los resultados obtenidos.
-    print(f"El mayor resultado del Índice de Criminalidad es de {maximo_criminalidad} delitos.")
-    print(f"El menor resultado del Índice de Criminalidad es de {minimo_criminalidad} delitos.")
-    print(f"La media del Índice de Criminalidad es de {round(media_criminalidad, 2)} delitos.")
-
-# (Función para ordenar los delitos por fecha ascendente.
-
-# Función para ordenar los delitos por fecha descendente.
 
 # Función para calcular el tiempo entre delitos.
 def calcular_tiempo_entre_delitos():

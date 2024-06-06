@@ -54,12 +54,121 @@ data = pd.read_csv(ruta_archivo)
 print(data) """
 
 #3.1.7
-import numpy as np
+""" import numpy as np
 
 ruta_archivo = 'C:/Users/josei/Desktop/puntos_de_acceso_wifi_Mexico.csv'
 
-# Cargar el archivo CSV con NumPy
+data = np.genfromtxt(ruta_archivo, delimiter=',', dtype=None, encoding='utf-8', names=True)
+print(data.dtype)
+# Mostrar los datos
+print(data) """
+
+#3.1.8
+""" import numpy as np
+
+ruta_archivo = 'C:/Users/josei/Desktop/puntos_de_acceso_wifi_Mexico.csv'
+
 data = np.genfromtxt(ruta_archivo, delimiter=',', dtype=None, encoding='utf-8', names=True)
 
-# Mostrar los datos
-print(data)        
+id = data['\ufeffid']
+programa = data['programa']
+fecha_instalacion = data['fecha_instalacion']
+latitud = data['latitud']
+longitud = data['longitud']
+colonia = data['colonia']
+alcaldia = data['alcaldia']
+
+print("id:")
+print(id)
+print("\nPrograma:")
+print(programa)
+print("\nFecha de instalación:")
+print(fecha_instalacion)
+print("\nLatitud:")
+print(latitud)
+print("\nLongitud:")
+print(longitud)
+print("\nColonia:")
+print(colonia)
+print("\nAlcaldia:")
+print(alcaldia) """
+
+#3.1.9
+""" import numpy as np
+
+ruta_archivo = 'C:/Users/josei/Desktop/puntos_de_acceso_wifi_Mexico.csv'
+
+data = np.genfromtxt(ruta_archivo, delimiter=',', dtype=None, encoding='utf-8', names=True)
+
+alcaldias_unicas = np.unique(data['alcaldia'])
+
+for alcaldia in alcaldias_unicas:
+    print(alcaldia) """
+
+#3.1.10
+""" import json
+
+ruta_archivo = 'C:/Users/josei/Desktop/Catálogo de información pública.json'
+
+with open(ruta_archivo, 'r', encoding='utf-8') as contenido:
+    data = json.load(contenido)
+
+print(json.dumps(data, indent=1, ensure_ascii=False)) """
+
+#3.1.11
+""" import numpy as np
+
+# Ruta del archivo CSV (descargado manualmente)
+ruta_archivo = 'C:/Users/josei/Desktop/BBDD_Funcionarios_Publicos_2020.csv'
+
+# Cargar el archivo CSV en un array de Numpy
+data = np.genfromtxt(ruta_archivo, delimiter=';', dtype=None, encoding='utf-8', names=True)
+
+print(data.dtype) """
+
+#3.1.11
+""" import ssl
+import numpy as np
+import urllib.request
+import io
+
+ssl = ssl._create_unverified_context()
+
+http_request = urllib.request.urlopen(
+    "https://www.consejotransparencia.cl/transparencia_activa/datoabierto/archivosFiscalizacion/BBDD_Funcionarios_Publicos_2020.csv",  context=ssl)
+
+data = np.genfromtxt(io.BytesIO(http_request.read()), delimiter=";", dtype=str, encoding="utf-8-sig", unpack=True)
+
+data_transposed = data.T
+
+for column in data_transposed:
+    print(column) """
+
+#3.1.12
+""" import pandas as pd
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
+ruta_archivo = 'https://www.consejotransparencia.cl/transparencia_activa/datoabierto/archivosFiscalizacion/BBDD_Funcionarios_Publicos_2020.csv'
+
+columnas_deseadas = ['ID_Encuestado', 'P1_1', 'P2_4']
+data = pd.read_csv(ruta_archivo, usecols=columnas_deseadas, delimiter=';', encoding='utf-8')
+
+print(data.head()) """
+
+#3.1.13
+import pandas as pd
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
+ruta_archivo = 'https://www.consejotransparencia.cl/transparencia_activa/datoabierto/archivosFiscalizacion/BBDD_Funcionarios_Publicos_2020.csv'
+
+valor = ruta_archivo.loc[319, 'P7_4']
+
+print("El valor en la fila 319 de la columna P7_4 es:", valor)
+
+
+
+
