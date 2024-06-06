@@ -27,7 +27,7 @@ with open(ruta_archivo, newline='', encoding='utf-8') as csv_file:
 
 
 #3.1.3
-import numpy as np
+""" import numpy as np
 
 ruta_archivo = 'C:/Users/josei/Desktop/apellidos_mas_frecuentes_pais_Argentina.csv'
 
@@ -42,7 +42,24 @@ print(apellidos)
 print("\nPorcentajes de población portadora:")
 print(porcentajes)
 print("\nRankings:")
-print(rankings)
+print(rankings) """
 
+#3.1.6
+""" import pandas as pd
 
-        
+ruta_archivo = 'C:/Users/josei/Desktop/puntos_de_acceso_wifi_Mexico.csv'
+
+data = pd.read_csv(ruta_archivo)
+
+print(data) """
+
+#3.1.7
+import numpy as np
+
+ruta_archivo = 'puntos_de_acceso_wifi_Mexico.csv'
+
+# Cargar el archivo CSV con NumPy
+data = np.genfromtxt(ruta_archivo, delimiter=',', dtype=None, encoding='utf-8', names=True)
+
+# Mostrar los datos
+print(data)        
