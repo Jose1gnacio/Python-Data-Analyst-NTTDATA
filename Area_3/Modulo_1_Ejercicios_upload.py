@@ -158,16 +158,34 @@ data = pd.read_csv(ruta_archivo, usecols=columnas_deseadas, delimiter=';', encod
 print(data.head()) """
 
 #3.1.13
-import pandas as pd
+""" import pandas as pd
 import ssl
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
 ruta_archivo = 'https://www.consejotransparencia.cl/transparencia_activa/datoabierto/archivosFiscalizacion/BBDD_Funcionarios_Publicos_2020.csv'
 
-valor = ruta_archivo.loc[319, 'P7_4']
+df = pd.read_csv(ruta_archivo, delimiter=';', encoding='utf-8')
 
-print("El valor en la fila 319 de la columna P7_4 es:", valor)
+valor = df.loc[319, 'P7_4']
+
+print("El valor en la fila 319 de la columna P7_4 es:", valor) """
+
+#3.1.14
+""" import pandas as pd
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
+ruta_archivo = 'https://www.consejotransparencia.cl/transparencia_activa/datoabierto/archivosFiscalizacion/BBDD_Funcionarios_Publicos_2020.csv'
+
+df = pd.read_csv(ruta_archivo, delimiter=';', encoding='utf-8')
+
+ruta_guardado = 'C:\\Users\\josei\\Documents\\NTT DATA CLASES\\Área 3 - Material de clases\\Modulo_1\\Funcionarios_Chile.csv'  
+
+df.to_csv(ruta_guardado, index=False, sep=';', encoding='utf-8')
+
+print(f"El archivo CSV ha sido guardado en: {ruta_guardado}") """
 
 
 
