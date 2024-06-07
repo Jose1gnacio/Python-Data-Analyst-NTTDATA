@@ -268,4 +268,29 @@ nueva_data = {
     'Beneficio': [0] * len(df_original)  
 }
 df_con_beneficio = pd.DataFrame(nueva_data)
-print(df_con_beneficio)
+#print(df_con_beneficio)
+
+#3.2.21
+df_con_beneficio['Beneficio'] = df_original['Ventas'] - df_original['Gastos']
+
+#print(df_con_beneficio)
+
+#3.2.22
+""" meses_con_perdida = df_con_beneficio[df_con_beneficio['Beneficio'] < 0]
+
+print("Meses con pérdida: ")
+print(meses_con_perdida) """
+
+#3.2.23
+""" mes_mayor = df_con_beneficio[df_con_beneficio['Beneficio'] == df_con_beneficio['Beneficio'].max()]
+
+print("Mes con mayor ganancia: ")
+print(mes_mayor) """
+
+#3.2.24
+""" media_anual = df_con_beneficio['Beneficio'].mean()
+
+meses_mayor_que_media = df_con_beneficio[df_con_beneficio['Beneficio'] > media_anual]
+
+print("Meses con beneficio mayor que la media anual:")
+print(meses_mayor_que_media) """
