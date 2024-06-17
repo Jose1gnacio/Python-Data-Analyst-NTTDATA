@@ -120,7 +120,7 @@ print(f"Q2: {q2}")
 print(f"Q3: {q3}") """
 
 #3.3.6
-datos = [
+""" datos = [
     [4, 5, 5, 1, 7, 4],
     [3, 2, 4, 4, 3, 6],
     [6, 4, 3, 3, 4, 5],
@@ -132,6 +132,118 @@ corr_pearson = df.corr(method='pearson')
 sns.heatmap(corr_pearson, annot=True, cmap='coolwarm')
 print(corr_pearson)
 plt.title('Matriz de Correlación de Pearson')
+plt.show() """
+
+#3.3.7
+""" data = {
+    'Artículos': ['Art0001', 'Art0002', 'Art0003', 'Art0004', 'Art0005'],
+    'Pedidos': [325, 125, 205, 54, 186],
+    'Entregado': ['S', 'S', 'N', 'N', 'S'],
+    'Facturación': [8125, 9375, 13325, 18900, 9300]
+}
+df = pd.DataFrame(data)
+
+media_facturacion = df['Facturación'].mean()
+varianza_pedidos = df['Pedidos'].var()
+covarianza = df[['Pedidos', 'Facturación']].cov().loc['Pedidos', 'Facturación']
+entregados = df[df['Entregado'] == 'S']
+media_facturacion_entregados = entregados['Facturación'].mean()
+media_pedidos_entregados = entregados['Pedidos'].mean()
+
+print("Media de facturación:", media_facturacion)
+print("Varianza de pedidos:", varianza_pedidos)
+print("Covarianza entre pedidos y facturación:", covarianza)
+print("Media de facturación de artículos entregados:", media_facturacion_entregados)
+print("Media de pedidos de artículos entregados:", media_pedidos_entregados) """
+
+#3.3.8
+""" notas_lengua = [5, 7, 6, 2, 8, 9, 3, 4, 1, 9, 5, 4, 6, 4, 8, 7, 6, 2, 8, 9]
+notas_matematicas = [7, 8, 5, 6, 8, 3, 2, 9, 9, 6, 1, 5, 7, 3, 5, 4, 5, 9, 7, 6]
+correlacion = np.corrcoef(notas_lengua, notas_matematicas)[0, 1]
+print(f"Coeficiente de correlación entre las notas de lengua y matemáticas: {correlacion}")
+plt.scatter(notas_lengua, notas_matematicas, color='blue', marker='o', alpha=0.5)
+plt.title('Gráfico de dispersión: Notas de lengua vs. Notas de matemáticas')
+plt.xlabel('Notas de lengua')
+plt.ylabel('Notas de matemáticas')
+plt.grid(True)
+plt.tight_layout()
+plt.show() """
+
+#3.3.9
+""" notas_lengua = [5, 7, 6, 2, 8, 9, 3, 4, 1, 9, 5, 4, 6, 4, 8, 7, 6, 2, 8, 9]
+notas_ingles = [7, 9, 7, 5, 9, 9, 5, 6, 3, 9, 7, 6, 8, 6, 9, 8, 8, 4, 9, 9]
+correlacion = np.corrcoef(notas_lengua, notas_ingles)[0, 1]
+print(f"Coeficiente de correlación entre las notas de lengua y matemáticas: {correlacion}")
+plt.scatter(notas_lengua, notas_ingles, color='blue', marker='o', alpha=0.5)
+plt.title('Gráfico de dispersión: Notas de lengua vs. Notas de ingles')
+plt.xlabel('Notas de lengua')
+plt.ylabel('Notas de ingles')
+plt.grid(True)
+plt.tight_layout()
+plt.show() """
+
+#3.3.10
+""" edades = [25, 36, 25, 20, 35, 24, 42, 44, 51, 32, 36, 36, 25, 29, 28, 25, 36, 37, 29, 44,
+          42, 41, 40, 40, 42, 51, 25, 26, 28, 27, 32, 31, 30, 31, 39, 36, 36, 32, 23, 26,
+          24, 27, 46, 46, 48]
+
+intervalos = range(min(edades), max(edades) + 11, 10)
+
+plt.hist(edades, bins=intervalos, edgecolor='black')
+plt.title('Histograma de Edades en el Sector TIC')
+plt.xlabel('Edades')
+plt.ylabel('Frecuencia')
+plt.show() """
+
+#3.3.11
+""" edades = [25, 36, 25, 20, 35, 24, 42, 44, 51, 32, 36, 36, 25, 29, 28, 25, 36, 37, 29, 44,
+          42, 41, 40, 40, 42, 51, 25, 26, 28, 27, 32, 31, 30, 31, 39, 36, 36, 32, 23, 26,
+          24, 27, 46, 46, 48]
+
+box = plt.boxplot(edades, patch_artist=True, boxprops=dict(facecolor='lightblue', color='black'))
+plt.boxplot(edades)
+plt.title('Diagrama de Caja de Edades en el Sector TIC')
+plt.xlabel('Grupo de Edades')
+plt.ylabel('Edad')
+plt.grid(True)
+plt.show() """
+
+#3.3.12
+""" def solicitar_ventas():
+    ventas_mensuales = []
+    meses = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ]
+    
+    for mes in meses:
+        venta = float(input(f"Ingrese las ventas de {mes}: "))
+        ventas_mensuales.append(venta)
+    
+    return meses, ventas_mensuales
+
+def graficar_ventas(meses, ventas_mensuales):
+    plt.figure(figsize=(10, 6))
+    plt.bar(meses, ventas_mensuales, color='blue')
+    plt.xlabel('Meses')
+    plt.ylabel('Ventas')
+    plt.title('Ventas mensuales por mes')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+if __name__ == "__main__":
+    meses, ventas_mensuales = solicitar_ventas()
+    graficar_ventas(meses, ventas_mensuales) """
+
+#3.3.13
+archivo_csv = r'C:\Users\josei\Documents\NTT DATA CLASES\Área 3 - Material de clases\Modulo_2\apellidos_mas_frecuentes_pais_Argentina.csv'
+df = pd.read_csv(archivo_csv)
+
+plt.boxplot(df['porcentaje_de_poblacion_portadora'])
+plt.title('Porcentaje de población portadora por apellido (Argentina)')
+plt.ylabel('Porcentaje de población portadora (%)')
+plt.grid(True)
 plt.show()
 
 
