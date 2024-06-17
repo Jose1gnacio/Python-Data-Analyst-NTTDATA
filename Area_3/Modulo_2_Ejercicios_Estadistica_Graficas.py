@@ -237,13 +237,13 @@ if __name__ == "__main__":
     graficar_ventas(meses, ventas_mensuales) """
 
 #3.3.13
-archivo_csv = r'C:\Users\josei\Documents\NTT DATA CLASES\Área 3 - Material de clases\Modulo_2\apellidos_mas_frecuentes_pais_Argentina.csv'
+""" archivo_csv = r'C:\Users\josei\Documents\NTT DATA CLASES\Área 3 - Material de clases\Modulo_2\apellidos_mas_frecuentes_pais_Argentina.csv'
 df = pd.read_csv(archivo_csv)
 
 plt.boxplot(df['porcentaje_de_poblacion_portadora'])
 plt.title('Porcentaje de población portadora por apellido (Argentina)')
 plt.ylabel('Porcentaje de población portadora (%)')
 plt.grid(True)
-plt.show()
+plt.show() """
 
 
