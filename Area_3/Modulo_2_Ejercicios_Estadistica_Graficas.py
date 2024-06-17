@@ -97,10 +97,41 @@ resultado = np.median(valores)
 print(f"La mediana es {resultado}") """
 
 #3.3.4
-datos = {
-    '0 hijos': 5,
-    '1 hijo': 6,
-    '2 hijos': 8,
-    '3 hijos': 4,
-    '4 hijos': 2
-}
+""" hijos = np.array([0]*5 + [1]*6 + [2]*8 + [3]*4 + [4]*2)
+
+#media
+media = np.mean(hijos)
+
+#varianza
+varianza = np.var(hijos)
+
+print(f"La media es {media}")
+print(f"La varianza es {varianza}") """
+
+#3.3.5
+""" impuestos = np.array([0.16, 0.2, 0.06, 0.06, 0.07, 0.17, 0.06, 0.22])
+
+q1 = np.percentile(impuestos, 25)
+q2 = np.percentile(impuestos, 50)
+q3 = np.percentile(impuestos, 75)
+
+print(f"Q1: {q1}")
+print(f"Q2: {q2}")
+print(f"Q3: {q3}") """
+
+#3.3.6
+datos = [
+    [4, 5, 5, 1, 7, 4],
+    [3, 2, 4, 4, 3, 6],
+    [6, 4, 3, 3, 4, 5],
+    [5, 2, 4, 7, 3, 6],
+    [2, 1, 3, 7, 3, 1]
+]
+df = pd.DataFrame(datos)
+corr_pearson = df.corr(method='pearson')
+sns.heatmap(corr_pearson, annot=True, cmap='coolwarm')
+print(corr_pearson)
+plt.title('Matriz de Correlación de Pearson')
+plt.show()
+
+
