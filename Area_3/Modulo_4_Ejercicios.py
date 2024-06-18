@@ -1,4 +1,6 @@
 import pandas as pd
+#pd.set_option('display.max_columns', None)
+
 #archivo_csv = r'C:\Users\josei\Documents\NTT DATA CLASES\Área 3 - Material de clases\Modulo_4\World_Development_Report_2021.csv'
 #df = pd.read_csv(archivo_csv)
 
@@ -95,22 +97,23 @@ df_mod = df.drop(columnas_a_eliminar, axis=1)
 #df_mod.info()
 
 #3.5.12
-# Mostrar las primeras filas del DataFrame original para entender la estructura
-print("DataFrame original:")
-print(df.head())
+#print("DataFrame original:")
+#print(df['Anno2013'])
 
-# Identificar los registros con valores nulos en la columna 'Anno2013'
-registros_nulos_2013 = df[df['Anno2013'].isnull()]
+registros_nulos_2013 = df_mod[df_mod['Anno2013'].isnull()]
 
-# Mostrar los registros con valores nulos en 'Anno2013'
-print("\nRegistros con valores nulos en 'Anno2013':")
-print(registros_nulos_2013)
+#print("\nRegistros con valores nulos en 'Anno2013':")
+#print(registros_nulos_2013['Anno2013'])
 
-# Eliminar los registros con valores nulos en 'Anno2013'
-df_sin_nulos_2013 = df.dropna(subset=['Anno2013'])
+df_mod_2 = df_mod.dropna(subset=['Anno2013'])
 
-# Verificar que se hayan eliminado correctamente los registros con valores nulos en 'Anno2013'
-print("\nDataFrame después de eliminar nulos en 'Anno2013':")
-print(df_sin_nulos_2013.head())
+#print("\nDataFrame después de eliminar nulos en 'Anno2013':")
+#print(df_mod_2['Anno2013'])
 
+#3.5.13
+numerical_columns = df_mod_2.select_dtypes(include=['number']).columns
+df_mod_2[numerical_columns] = df_mod_2[numerical_columns].apply(lambda x: x.fillna(x.mean()), axis=0)
+
+print("DataFrame después de rellenar los valores nulos con la media:")
+print(df_mod_2.head())
 
