@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 #pd.set_option('display.max_columns', None)
 
 #archivo_csv = r'C:\Users\josei\Documents\NTT DATA CLASES\Área 3 - Material de clases\Modulo_4\World_Development_Report_2021.csv'
@@ -114,6 +115,33 @@ df_mod_2 = df_mod.dropna(subset=['Anno2013'])
 numerical_columns = df_mod_2.select_dtypes(include=['number']).columns
 df_mod_2[numerical_columns] = df_mod_2[numerical_columns].apply(lambda x: x.fillna(x.mean()), axis=0)
 
-print("DataFrame después de rellenar los valores nulos con la media:")
-print(df_mod_2.head())
+#print("DataFrame después de rellenar los valores nulos con la media:")
+#print(df_mod_2.head())
 
+#3.5.14
+df_years = df_mod_2[['Anno2016', 'Anno2014']]
+
+""" plt.figure(figsize=(10, 6))
+df_years.boxplot(flierprops=dict(markerfacecolor='r', marker='o'))
+plt.title('Diagrama de Caja para Anno2016 y Anno2014')
+plt.ylabel('Valores')
+plt.show() """
+
+#3.5.15
+Q1 = df_years.quantile(0.25)
+Q3 = df_years.quantile(0.75)
+IQR = Q3 - Q1
+
+
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+
+df_years_filtered = df_years[~((df_years < lower_bound) | (df_years > upper_bound)).any(axis=1)]
+
+
+plt.figure(figsize=(10, 6))
+boxplot = df_years_filtered.boxplot(flierprops=dict(markerfacecolor='r', marker='o'))
+plt.title('Diagrama de Caja para Anno2016 y Anno2014 (Sin Outliers)')
+plt.ylabel('Valores')
+plt.show()
