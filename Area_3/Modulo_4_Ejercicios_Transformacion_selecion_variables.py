@@ -286,37 +286,77 @@ print("\nVarianzas originales y finales:")
 print(variances_df) """
 
 #3.6.18
-#Paso 1: Cargar el dataset y explorar los datos iniciales
+# PASO 1: CARGAR EL DATASET Y EXPLORAR LOS DATOS INICIALES
 archivo_csv = r'C:\Users\josei\Documents\NTT DATA CLASES\Área 3 - Material de clases\Modulo_4\netflix_movies_and_tv_shows_sample_dataset_sample.csv'
 df = pd.read_csv(archivo_csv)
-print(df.head())
+#print(df.head())
 
-#Paso 2: Limpieza inicial y exploración de datos
-# Verificar información del dataset
-print(df.info())
+# PASO 2: LIMPIEZA DATASET 
+## 2.1 Valores Nulos
+valores_nulos = df.isnull().sum()
 
-#Contar valores nulos por columna
-print(df.isnull().sum())
+###Filtrar columnas que tienen al menos un valor nulo
+columnas_con_nulos = valores_nulos[valores_nulos > 0]
 
-#Paso 3: Eliminar las columnas duplicadas
-#Eliminar filas con valores nulos (si es adecuado según el contexto)
-df = df.loc[:, ~df.columns.duplicated()]
+#print(f"Columnas con valores nulos: \n{columnas_con_nulos}")
 
-#Paso 4:  Imputar valores nulos por simplicidad (si es necesario)
-# df['columna_a'].fillna(df['columna_a'].mean(), inplace=True)
+## 2.2 Manejo de valores nulos, rellenan con "Unknown" o valores específicos
+df['formattedDuration'] = df['formattedDuration'].fillna('Unknown')
+df['actors'] = df['actors'].fillna('Unknown')
+df['director'] = df['director'].fillna('Unknown')
+df['creator'] = df['creator'].fillna('Unknown')
+df['audio'] = df['audio'].fillna('Unknown')
+df['subtitle'] = df['subtitle'].fillna('Unknown')
+df['numberOfSeasons'] = df['numberOfSeasons'].fillna(0)
+df['seasonStartDate'] = df['seasonStartDate'].fillna('Unknown')
 
-#Eliminar duplicados
-df = df.drop_duplicates()
+### Verificar que no haya valores nulos
+valores_nulos_despues = df.isnull().sum()
+#print(f"Valores nulos restantes: \n {valores_nulos_despues}")
 
-#Limpiar texto o cadenas de texto
-df['columna'] = df['columna'].str.strip()  # Eliminar espacios en blanco
+## 2.3 Formato de fecha
+df['releasedDate'] = pd.to_datetime(df['releasedDate'], errors='coerce')
 
-#Paso 7: Resetear los índices
-#Resetear los índices después de eliminar columnas no informativas
-df.reset_index(drop=True, inplace=True)
+### Verificar el resultado
+#print(df['releasedDate'].head())
 
 
-print(df)
-#Paso 5: Guardar el dataset limpio
-# Guardar el dataset limpio en un nuevo archivo CSV
-#df.to_csv('netflix_clean.csv', index=False)
+## 2.4 Estandarización de nombres de las columnas
+### Estandarizar nombres de columnas
+df.columns = df.columns.str.strip().str.replace(' ', '_')
+
+### Verificar los nombres de columnas estandarizados
+#print(f"Columnas estandarizadas: \n {df.columns}")
+
+## 2.5 Eliminar columnas no informativas
+# Mostrar las columnas actuales
+#print(df.columns)
+
+# Decidir qué columnas eliminar (ejemplo: sourceLink y scrapedAt)
+columnas_a_eliminar = ['sourceLink', 'scrapedAt']
+
+# Eliminar las columnas seleccionadas
+df.drop(columns=columnas_a_eliminar, inplace=True)
+
+# Verificar las columnas después de la eliminación
+#print(f"\nColumnas después de eliminar: \ndf.columns")
+
+## 2.6 Valores duplicados
+# Verificar y eliminar duplicados
+duplicados = df[df.duplicated()]
+#print(f"Valores duplicados: \n {duplicados}")
+
+## PASO 3: GUARDAR EL DATASET LIMPIO
+
+archivo_limpiado = r'C:\Users\josei\Documents\NTT DATA CLASES\Área 3 - Material de clases\Modulo_4\netflix_movies_and_tv_shows_sample_dataset_cleaned.csv'
+
+# Guardar el DataFrame en el nuevo archivo CSV
+df.to_csv(archivo_limpiado, index=False)
+
+print(f"El dataset limpio ha sido guardado en: {archivo_limpiado}")
+
+
+
+
+
+
