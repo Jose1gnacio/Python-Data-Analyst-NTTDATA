@@ -1,5 +1,5 @@
 from sklearn import datasets
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split, cross_val_score, LeaveOneOut
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
@@ -18,7 +18,7 @@ result = model.score(X_test,y_test)
 print(result) """
 
 #3.8.2
-# Usar solo las dos primeras columnas como features
+""" # Usar solo las dos primeras columnas como features
 X = iris.data[:, :2]
 y = iris.target
 
@@ -30,4 +30,20 @@ scores = cross_val_score(model, X, y, cv=4)
 
 # Resultados de los cross-validation scores
 print(scores)
-print(scores.mean())
+print(scores.mean()) """
+
+#3.8.3
+# Usar solo las dos primeras columnas como features
+X = iris.data[:, :2]
+y = iris.target
+
+# Crear el modelo
+model = LogisticRegression()
+
+# Aplicar Leave-One-Out cross-validation
+loocv = LeaveOneOut()
+scores = cross_val_score(model, X, y, cv=loocv)
+
+# Mostrar el promedio del cross-validation score
+print("Average Leave-One-Out cross-validation score:", scores.mean())
+
