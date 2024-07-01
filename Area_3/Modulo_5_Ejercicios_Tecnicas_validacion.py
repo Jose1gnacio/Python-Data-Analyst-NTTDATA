@@ -1,5 +1,5 @@
 from sklearn import datasets
-from sklearn.model_selection import train_test_split, cross_val_score, LeaveOneOut
+from sklearn.model_selection import train_test_split, cross_val_score, LeaveOneOut, ShuffleSplit
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
@@ -33,7 +33,7 @@ print(scores)
 print(scores.mean()) """
 
 #3.8.3
-# Usar solo las dos primeras columnas como features
+""" # Usar solo las dos primeras columnas como features
 X = iris.data[:, :2]
 y = iris.target
 
@@ -45,5 +45,23 @@ loocv = LeaveOneOut()
 scores = cross_val_score(model, X, y, cv=loocv)
 
 # Mostrar el promedio del cross-validation score
-print("Average Leave-One-Out cross-validation score:", scores.mean())
+print("Average Leave-One-Out cross-validation score:", scores.mean()) """
+
+#3.8.4
+# Usar solo las dos primeras columnas como features
+X = iris.data[:, :2]
+y = iris.target
+
+# Crear el modelo
+model = LogisticRegression()
+
+# Configurar Shuffle Split con 4 repeticiones
+shuffle_split = ShuffleSplit(n_splits=4, test_size=0.2, random_state=42)
+
+# Aplicar Shuffle Split cross-validation
+scores = cross_val_score(model, X, y, cv=shuffle_split)
+
+# Mostrar los scores obtenidos
+print("Shuffle Split cross-validation scores:", scores)
+print("Average Shuffle Split cross-validation score:", scores.mean())
 
