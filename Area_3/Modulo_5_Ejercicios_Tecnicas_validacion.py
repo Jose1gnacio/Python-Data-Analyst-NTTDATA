@@ -1,25 +1,33 @@
 from sklearn import datasets
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
-# Cargar el dataset iris
 iris = datasets.load_iris()
 
+#3.8.1
+""" X = iris.data[:, :2]
+y = iris.target
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+result = model.score(X_test,y_test)
+print(result) """
+
+#3.8.2
 # Usar solo las dos primeras columnas como features
 X = iris.data[:, :2]
 y = iris.target
 
-# Dividir el dataset en conjuntos de entrenamiento y prueba
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Crear y entrenar el modelo
+# Crear el modelo
 model = LogisticRegression()
-model.fit(X_train, y_train)
 
-# Predecir las etiquetas para el conjunto de prueba
-y_pred = model.predict(X_test)
+# Aplicar K-fold cross-validation con 4 pliegues
+scores = cross_val_score(model, X, y, cv=4)
 
-# Calcular el accuracy score
-score = accuracy_score(y_test, y_pred)
-print(score)
+# Resultados de los cross-validation scores
+print(scores)
+print(scores.mean())
