@@ -127,7 +127,7 @@ print("Error absoluto medio:", mae)
 """ r2_score = model.score(X_test, y_test)
 print(f"Coeficiente de determinación (Precisión del modelo): {r2_score}") """
 
-#3.9.12
+""" #3.9.12
 from sklearn.datasets import load_iris
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.tree import DecisionTreeClassifier
@@ -158,6 +158,44 @@ grid_search.fit(X_train, y_train)
 # Obtener los resultados
 best_score = grid_search.best_score_
 best_params = grid_search.best_params_
+
+# Mostrar resultados
+print("Mejor puntuación del modelo:", best_score)
+print("Mejor configuración de parámetros:", best_params)
+ """
+
+#3.9.13
+from sklearn.datasets import load_iris
+from sklearn.model_selection import RandomizedSearchCV, train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from scipy.stats import randint
+
+# Cargar el dataset
+data = load_iris()
+X = data.data
+y = data.target
+
+# Dividir los datos en entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Definir el modelo de árbol de decisión
+model = DecisionTreeClassifier()
+
+# Definir el grid de parámetros a probar
+param_dist = {
+    "max_depth": [4],  # Profundidad máxima del árbol
+    "criterion": ["entropy"]  # Criterio para la división de nodos
+}
+
+# Configurar Randomized Search con validación cruzada (cross-validation)
+random_search = RandomizedSearchCV(estimator=model, param_distributions=param_dist, n_iter=10, cv=5, scoring='accuracy', random_state=42)
+
+# Ejecutar Randomized Search para encontrar la mejor configuración
+random_search.fit(X_train, y_train)
+
+# Obtener los resultados
+best_score = random_search.best_score_
+best_params = random_search.best_params_
 
 # Mostrar resultados
 print("Mejor puntuación del modelo:", best_score)
