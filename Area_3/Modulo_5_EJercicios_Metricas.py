@@ -1,7 +1,7 @@
 from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import cross_val_score, KFold
+from sklearn.model_selection import cross_val_score, KFold, train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import precision_score, make_scorer, recall_score, f1_score
+from sklearn.metrics import precision_score, make_scorer, recall_score, f1_score, roc_auc_score, confusion_matrix
 
 # Cargar el dataset
 data = load_breast_cancer()
@@ -47,7 +47,7 @@ print("Cross-validation scores (recall):", scores)
 print("Mean recall:", scores.mean()) """
 
 #3.9.4
-# Calcular cross-validation score con métrica de F1-score
+""" # Calcular cross-validation score con métrica de F1-score
 # Definir scorer para F1-score
 scorer = make_scorer(f1_score, average='binary')
 
@@ -56,4 +56,69 @@ scores = cross_val_score(model, X, y, cv=kfold, scoring=scorer)
 
 # Mostrar los scores obtenidos
 print("Cross-validation scores (F1-score):", scores)
-print("Mean F1-score:", scores.mean())
+print("Mean F1-score:", scores.mean()) """
+
+#3.9.5
+""" # Calcular cross-validation scores con métrica AUC-ROC
+scores = cross_val_score(model, X, y, cv=kfold, scoring='roc_auc')
+
+# Mostrar los scores obtenidos
+print("Cross-validation scores (AUC-ROC):", scores)
+print("Mean AUC-ROC:", scores.mean()) """
+
+#3.9.6
+""" # Dividir los datos en entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Crear un modelo de regresión logística con max_iter aumentado
+model = LogisticRegression(max_iter=1000)  # Aumentar el número máximo de iteraciones
+
+# Entrenar el modelo con los datos de entrenamiento
+model.fit(X_train, y_train)
+
+# Predecir con los datos de prueba
+y_pred = model.predict(X_test)
+
+# Calcular la matriz de confusión
+conf_matrix = confusion_matrix(y_test, y_pred)
+
+# Mostrar la matriz de confusión
+print("Matriz de Confusión:")
+print(conf_matrix) """
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
+# Cargar el dataset
+data = load_iris()
+X = data.data
+y = data.target
+
+#3.9.8
+# Dividir los datos en entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Crear un modelo de regresión logística
+model = LogisticRegression(max_iter=1000)  # Aumentar el número máximo de iteraciones si es necesario
+
+# Entrenar el modelo con los datos de entrenamiento
+model.fit(X_train, y_train)
+
+# Predecir con los datos de prueba
+y_pred = model.predict(X_test)
+
+# Calcular el error cuadrático medio (MSE)
+mse = mean_squared_error(y_test, y_pred)
+
+# Mostrar el error cuadrático medio
+#print("Error cuadrático medio:", mse)
+
+#3.9.9
+# Calcular el error absoluto medio (MAE)
+mae = mean_absolute_error(y_test, y_pred)
+
+# Mostrar el error absoluto medio
+print("Error absoluto medio:", mae)
+
