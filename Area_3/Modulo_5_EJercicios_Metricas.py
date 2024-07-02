@@ -86,7 +86,7 @@ conf_matrix = confusion_matrix(y_test, y_pred)
 print("Matriz de Confusión:")
 print(conf_matrix) """
 
-from sklearn.datasets import load_iris
+""" from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -113,12 +113,53 @@ y_pred = model.predict(X_test)
 mse = mean_squared_error(y_test, y_pred)
 
 # Mostrar el error cuadrático medio
-#print("Error cuadrático medio:", mse)
+#print("Error cuadrático medio:", mse) """
 
 #3.9.9
-# Calcular el error absoluto medio (MAE)
+""" # Calcular el error absoluto medio (MAE)
 mae = mean_absolute_error(y_test, y_pred)
 
 # Mostrar el error absoluto medio
 print("Error absoluto medio:", mae)
+ """
+
+#3.9.10
+""" r2_score = model.score(X_test, y_test)
+print(f"Coeficiente de determinación (Precisión del modelo): {r2_score}") """
+
+#3.9.12
+from sklearn.datasets import load_iris
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.tree import DecisionTreeClassifier
+
+# Cargar el dataset
+data = load_iris()
+X = data.data
+y = data.target
+
+# Dividir los datos en entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Definir el modelo de árbol de decisión
+model = DecisionTreeClassifier()
+
+# Definir el grid de parámetros a probar
+param_grid = {
+    "max_depth": [4],  # Profundidad máxima del árbol
+    "criterion": ["entropy"]  # Criterio para la división de nodos
+}
+
+# Configurar Grid Search con validación cruzada (cross-validation)
+grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5)
+
+# Ejecutar Grid Search para encontrar la mejor configuración
+grid_search.fit(X_train, y_train)
+
+# Obtener los resultados
+best_score = grid_search.best_score_
+best_params = grid_search.best_params_
+
+# Mostrar resultados
+print("Mejor puntuación del modelo:", best_score)
+print("Mejor configuración de parámetros:", best_params)
 
