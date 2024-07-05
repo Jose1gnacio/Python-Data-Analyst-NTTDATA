@@ -29,7 +29,7 @@ plt.show()
  """
 
 #3.12.3
-import matplotlib.pyplot as plt
+""" import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.datasets import make_gaussian_quantiles
 from sklearn.cluster import KMeans
@@ -64,4 +64,51 @@ plt.show()
 
 # Obtenemos el número óptimo de clústeres basado en el máximo score de Silhouette
 optimal_n_clusters = np.argmax(silhouette_scores) + 2  # Sumamos 2 porque empezamos desde 2 clústeres
-print(f"Número óptimo de clústeres según Silhouette: {optimal_n_clusters}")
+print(f"Número óptimo de clústeres según Silhouette: {optimal_n_clusters}") """
+
+#3.12.4
+""" import matplotlib.pyplot as plt
+from scipy.cluster.hierarchy import dendrogram, linkage
+from sklearn.datasets import make_gaussian_quantiles
+
+#Creamos el conjunto de datos con make_gaussian_quantiles
+X, y = make_gaussian_quantiles(n_samples=150, n_features=2, n_classes=3)
+
+#Calculamos la matriz de enlace utilizando el método completo y distancia euclidiana
+Z = linkage(X, method='complete', metric='euclidean')
+
+#Generamos el dendrograma
+plt.figure(figsize=(12, 6))
+dendrogram(Z)
+plt.title('Dendrograma Jerárquico')
+plt.xlabel('Índices de los puntos de datos')
+plt.ylabel('Distancia')
+plt.show()
+ """
+
+#3.12.5
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_gaussian_quantiles
+from sklearn.cluster import DBSCAN
+
+# Creamos el conjunto de datos con make_gaussian_quantiles
+X, y = make_gaussian_quantiles(n_samples=150, n_features=2, n_classes=3, random_state=42)
+
+# Inicializamos el algoritmo DBSCAN con epsilon=0.5 y min_samples=4
+dbscan = DBSCAN(eps=1.2, min_samples=4)
+
+# Entrenamos el modelo y predecimos los clústeres
+labels = dbscan.fit_predict(X)
+
+# Número de clústeres encontrados, ignorando el ruido (etiqueta -1)
+num_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+print(f"Número de clústeres encontrados por DBSCAN: {num_clusters}")
+
+# Visualizamos los datos y los clústeres identificados por DBSCAN
+plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis')
+plt.title('Clustering DBSCAN')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.colorbar()
+plt.show()
+
