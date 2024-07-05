@@ -189,24 +189,24 @@ from imblearn.ensemble import BalancedBaggingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from collections import Counter
 
-# Cargar el dataset iris
+#Cargar el dataset iris
 iris = load_iris()
 X, y = iris.data, iris.target
 
-# Dividir los datos en conjuntos de entrenamiento y prueba
+#Dividir los datos en conjuntos de entrenamiento y prueba
 X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.7, random_state=1)
 
-# Aplicar BalancedBaggingClassifier para balancear los datos
+#Aplicar BalancedBaggingClassifier para balancear los datos
 bbc = BalancedBaggingClassifier(estimator=DecisionTreeClassifier(),
                                 sampling_strategy='auto',
                                 replacement=False,
                                 random_state=1)
 bbc.fit(X_train, y_train)
 
-# Predecir las etiquetas para los datos de prueba
+#Predecir las etiquetas para los datos de prueba
 pred_y = bbc.predict(X_test)
 
-# Mostrar la matriz de confusión y el reporte de clasificación
+#Mostrar la matriz de confusión y el reporte de clasificación
 def mostrar_resultados(y_test, pred_y):
     conf_matrix = confusion_matrix(y_test, pred_y)
     plt.figure(figsize=(8, 8))
@@ -218,7 +218,7 @@ def mostrar_resultados(y_test, pred_y):
     
     print(classification_report(y_test, pred_y))
 
-# Mostrar los resultados
+#Mostrar los resultados
 mostrar_resultados(y_test, pred_y)
 
 
