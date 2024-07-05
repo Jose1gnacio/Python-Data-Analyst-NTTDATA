@@ -126,7 +126,7 @@ print(f"Coeficientes: \n{ridge.coef_}")
 print(f"Término independiente: {ridge.intercept_}") """
 
 #3.11.6
-from sklearn.datasets import load_diabetes
+""" from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import Lasso
 from sklearn.metrics import r2_score
@@ -153,7 +153,143 @@ score = lasso.score(X_test, y_test)
 
 print(f"Puntuación del modelo (R^2): {score}")
 print(f"Coeficientes: \n{lasso.coef_}")
-print(f"Término independiente: {lasso.intercept_}")
+print(f"Término independiente: {lasso.intercept_}") """
+
+#3.11.8
+""" from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+import numpy as np
+
+#Cargar el dataset digits
+digits = load_digits()
+X = digits.data
+y = digits.target
+
+#Dividir los datos en conjunto de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+#Inicializar el modelo de árbol de decisión
+clf = DecisionTreeClassifier(random_state=42)
+
+#Ajustar el modelo con los datos de entrenamiento
+clf.fit(X_train, y_train)
+
+#Calcular la precisión del modelo en el conjunto de prueba
+accuracy = clf.score(X_test, y_test)
+print(f"Puntuación del modelo (precisión): {accuracy}")
+
+#Generar datos aleatorios para una predicción
+np.random.seed(0)  # Fijamos la semilla para reproducibilidad
+random_data = np.random.rand(1, 64)  # Generamos datos aleatorios de la misma forma que los datos de entrada
+
+#Realizar la predicción con datos aleatorios
+prediction = clf.predict(random_data)
+print(f"Predicción con datos aleatorios: {prediction}") """
+
+#3.11.9
+""" from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+import numpy as np
+
+#Cargar el dataset digits
+digits = load_digits()
+X = digits.data
+y = digits.target
+
+#Dividir los datos en conjunto de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+#Inicializar el modelo de árbol de decisión con Gini y profundidad máxima de 8
+clf = DecisionTreeClassifier(criterion='gini', max_depth=8, random_state=42)
+
+#Ajustar el modelo con los datos de entrenamiento
+clf.fit(X_train, y_train)
+
+#Calcular la precisión del modelo en el conjunto de prueba
+accuracy = clf.score(X_test, y_test)
+print(f"Puntuación del modelo (precisión): {accuracy}")
+
+#Generar datos aleatorios para una predicción
+np.random.seed(0)  # Fijamos la semilla para reproducibilidad
+random_data = np.random.rand(1, 64)  # Generamos datos aleatorios de la misma forma que los datos de entrada
+
+#Realizar la predicción con datos aleatorios
+prediction = clf.predict(random_data)
+print(f"Predicción con datos aleatorios: {prediction}") """
+
+#3.11.10
+""" from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+import numpy as np
+
+# Cargar el dataset digits
+digits = load_digits()
+X = digits.data
+y = digits.target
+
+# Dividir los datos en conjunto de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Inicializar el modelo Random Forest con 50 árboles y profundidad máxima de 10
+rf = RandomForestClassifier(n_estimators=50, max_depth=10, random_state=42)
+
+# Ajustar el modelo con los datos de entrenamiento
+rf.fit(X_train, y_train)
+
+# Calcular la precisión del modelo en el conjunto de prueba
+accuracy = rf.score(X_test, y_test)
+print(f"Puntuación del modelo (precisión): {accuracy}")
+
+# Generar datos aleatorios para una predicción
+np.random.seed(0)  # Fijamos la semilla para reproducibilidad
+random_data = np.random.rand(1, 64)  # Generamos datos aleatorios de la misma forma que los datos de entrada
+
+# Realizar la predicción con datos aleatorios
+prediction = rf.predict(random_data)
+print(f"Predicción con datos aleatorios: {prediction}") """
+
+#3.11.11
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+import numpy as np
+
+#Cargar el dataset digits
+digits = load_digits()
+X = digits.data
+y = digits.target
+
+#Dividir los datos en conjunto de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+#Inicializar el modelo Random Forest con 10 árboles y profundidad máxima de 5
+rf = RandomForestClassifier(n_estimators=10, max_depth=5, random_state=42)
+
+#Ajustar el modelo con los datos de entrenamiento
+rf.fit(X_train, y_train)
+
+#Calcular la precisión del modelo en el conjunto de prueba
+accuracy = rf.score(X_test, y_test)
+print(f"Puntuación del modelo (precisión): {accuracy}")
+
+#Generar datos aleatorios para una predicción
+np.random.seed(0)  # Fijamos la semilla para reproducibilidad
+random_data = np.random.rand(1, 64)  # Generamos datos aleatorios de la misma forma que los datos de entrada
+
+#Realizar la predicción con datos aleatorios
+prediction = rf.predict(random_data)
+print(f"Predicción con datos aleatorios: {prediction}")
+
+
+
+
 
 
 
