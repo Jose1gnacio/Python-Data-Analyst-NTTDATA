@@ -1,4 +1,4 @@
-from sklearn.datasets import load_diabetes
+""" from sklearn.datasets import load_diabetes
 from sklearn.linear_model import LinearRegression
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,10 +11,10 @@ y = diabetes.target
 #Inicializar el modelo de regresión lineal
 model = LinearRegression()
 
-# Ajustar el modelo
+#Ajustar el modelo
 model.fit(X, y)
 
-# Obtener coeficientes y puntaje de ajuste
+#Obtener coeficientes y puntaje de ajuste
 coeficiente = model.coef_[0]
 intercepto = model.intercept_
 score = model.score(X, y)
@@ -27,5 +27,135 @@ plt.scatter(X, y, color="blue")
 plt.plot(X, model.predict(X), color="red")
 plt.xlabel("X")
 plt.ylabel("Y")
+plt.show() """
 
+""" #3.11.2
+from sklearn.datasets import load_diabetes
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+
+#Cargar el dataset
+diabetes = load_diabetes()
+X = diabetes.data[:, :2]  # Tomar las dos primeras columnas como variables independientes
+y = diabetes.target
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.2, random_state=42)
+
+#Inicializar el modelo de regresión lineal
+model = LinearRegression()
+
+#Ajustar el modelo
+model.fit(X_train, y_train)
+
+#Obtener coeficientes y puntaje de ajuste
+coeficientes = model.coef_
+intercepto = model.intercept_
+score = model.score(X, y)
+
+print(f"Coeficientes: {coeficientes}")
+print(f"Intercepto: {intercepto}")
+
+y_pred = model.predict(X_test)
+
+#Graficar los datos y la línea ajustada por el modelo
+plt.scatter(y_test, y_pred, color="blue")
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color="red", linewidth=2, label="Predicción del modelo")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.legend()
 plt.show()
+ """
+
+""" #3.11.4
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Cargar el dataset
+diabetes = load_diabetes()
+X = diabetes.data
+y = diabetes.target
+
+# Dividir los datos en conjunto de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Inicializar el modelo de regresión logística
+model = LogisticRegression(max_iter=1000)  # Aumentamos el número máximo de iteraciones para asegurar convergencia
+
+# Ajustar el modelo
+model.fit(X_train, y_train)
+
+# Predecir en el conjunto de prueba
+y_pred = model.predict(X_test)
+
+# Calcular la precisión del modelo
+precision = accuracy_score(y_test, y_pred)
+
+print(f"Precisión del modelo de regresión logística: {precision}")
+ """
+
+#3.11.5
+""" from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import Ridge
+
+#Cargar el dataset
+diabetes = load_diabetes()
+X = diabetes.data
+y = diabetes.target
+
+#Dividir los datos en conjunto de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+#Inicializar el modelo de regresión Ridge
+ridge = Ridge(alpha=0.1)  # alpha es el parámetro de regularización
+
+#Ajustar el modelo
+ridge.fit(X_train, y_train)
+
+#Predecir en el conjunto de prueba
+y_pred = ridge.predict(X_test)
+
+#Calcular la puntuación (R^2) del modelo en el conjunto de prueba
+score = ridge.score(X_test, y_test)
+
+print(f"Puntuación del modelo (R^2): {score}")
+print(f"Coeficientes: \n{ridge.coef_}")
+print(f"Término independiente: {ridge.intercept_}") """
+
+#3.11.6
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import Lasso
+from sklearn.metrics import r2_score
+
+#Cargar el dataset
+diabetes = load_diabetes()
+X = diabetes.data
+y = diabetes.target
+
+#Dividir los datos en conjunto de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+#Inicializar el modelo de regresión Lasso
+lasso = Lasso(alpha=0.1)  # alpha es el parámetro de regularización
+
+#Ajustar el modelo
+lasso.fit(X_train, y_train)
+
+#Predecir en el conjunto de prueba
+y_pred = lasso.predict(X_test)
+
+#Calcular la puntuación (R^2) del modelo en el conjunto de prueba
+score = lasso.score(X_test, y_test)
+
+print(f"Puntuación del modelo (R^2): {score}")
+print(f"Coeficientes: \n{lasso.coef_}")
+print(f"Término independiente: {lasso.intercept_}")
+
+
+
+
+
