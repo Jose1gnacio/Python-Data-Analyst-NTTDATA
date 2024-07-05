@@ -131,7 +131,7 @@ pred_y = model.predict(X_test)
 mostrar_resultados(y_test, pred_y) """
 
 #3.10.4
-from sklearn.datasets import load_iris
+""" from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, classification_report
@@ -177,3 +177,48 @@ print("Distribución después del balanceo {}".format(Counter(y_train_res)))
 model = run_model(X_train_res, X_test, y_train_res, y_test)
 pred_y = model.predict(X_test)
 mostrar_resultados(y_test, pred_y)
+ """
+
+#3.10.5
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, classification_report
+import matplotlib.pyplot as plt
+import seaborn as sns
+from imblearn.ensemble import BalancedBaggingClassifier
+from sklearn.tree import DecisionTreeClassifier
+from collections import Counter
+
+# Cargar el dataset iris
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# Dividir los datos en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.7, random_state=1)
+
+# Aplicar BalancedBaggingClassifier para balancear los datos
+bbc = BalancedBaggingClassifier(estimator=DecisionTreeClassifier(),
+                                sampling_strategy='auto',
+                                replacement=False,
+                                random_state=1)
+bbc.fit(X_train, y_train)
+
+# Predecir las etiquetas para los datos de prueba
+pred_y = bbc.predict(X_test)
+
+# Mostrar la matriz de confusión y el reporte de clasificación
+def mostrar_resultados(y_test, pred_y):
+    conf_matrix = confusion_matrix(y_test, pred_y)
+    plt.figure(figsize=(8, 8))
+    sns.heatmap(conf_matrix, xticklabels=iris.target_names, yticklabels=iris.target_names, annot=True, fmt="d", cmap='Blues')
+    plt.title("Confusion Matrix")
+    plt.ylabel('True Class')
+    plt.xlabel('Predicted Class')
+    plt.show()
+    
+    print(classification_report(y_test, pred_y))
+
+# Mostrar los resultados
+mostrar_resultados(y_test, pred_y)
+
+
