@@ -5,9 +5,9 @@ conexion = mysql.connector.connect(host = "localhost", user = "root", password =
 
 cursor = conexion.cursor()
 
-""" cursor.execute("show databases")
+cursor.execute("show databases")
 for base in cursor:
-    print(base) """
+    print(base)
 
 #2.3.1
 #cursor.execute("CREATE DATABASE Cine;")
@@ -77,9 +77,9 @@ for resultado in cursor:
     print(resultado) """
 
 #2.3.10
-consulta_sql = "DELETE FROM peliculas WHERE Año < 1980"
+""" consulta_sql = "DELETE FROM peliculas WHERE Año < 1980"
 cursor.execute(consulta_sql)
-conexion.commit()
+conexion.commit() """
 
 
 
