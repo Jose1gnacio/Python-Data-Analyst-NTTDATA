@@ -255,7 +255,7 @@ prediction = rf.predict(random_data)
 print(f"Predicción con datos aleatorios: {prediction}") """
 
 #3.11.11
-from sklearn.datasets import load_digits
+""" from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
@@ -285,10 +285,42 @@ random_data = np.random.rand(1, 64)  # Generamos datos aleatorios de la misma fo
 
 #Realizar la predicción con datos aleatorios
 prediction = rf.predict(random_data)
+print(f"Predicción con datos aleatorios: {prediction}") """
+
+
+#3.11.12
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from xgboost import XGBClassifier
+import numpy as np
+
+# Cargar el dataset digits
+digits = load_digits()
+X = digits.data
+y = digits.target
+
+# Dividir los datos en conjunto de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Corregir el nombre del parámetro n_estimators
+clf = XGBClassifier(n_estimators=10, max_depth=5, random_state=42)
+
+# Entrenar el modelo
+clf.fit(X_train, y_train)
+
+# Calcular y mostrar la puntuación de entrenamiento
+train_score = clf.score(X_train, y_train)
+print(f"Puntuación de entrenamiento: {train_score:.4f}")
+
+# Calcular y mostrar la puntuación de prueba
+test_score = clf.score(X_test, y_test)
+print(f"Puntuación de prueba: {test_score:.4f}")
+
+# Crear datos aleatorios y hacer una predicción
+random_data = np.random.rand(1, 64) * 16
+prediction = clf.predict(random_data)
 print(f"Predicción con datos aleatorios: {prediction}")
-
-
-
 
 
 
