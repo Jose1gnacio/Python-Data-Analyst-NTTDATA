@@ -390,9 +390,6 @@ random_data = np.random.rand(1, 64) * 16
 prediction_svc = clf.predict(random_data)
 print(f"Predicción con datos aleatorios: {prediction_svc}")
 
-# Obtener los vectores de soporte
-support_vectors = clf.support_vectors_
-print(f"Número de vectores de soporte: {support_vectors.shape[0]}")
 
 
 
