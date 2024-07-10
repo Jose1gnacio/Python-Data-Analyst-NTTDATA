@@ -323,7 +323,7 @@ prediction = clf.predict(random_data)
 print(f"Predicción con datos aleatorios: {prediction}") """
 
 #3.11.13
-from sklearn.datasets import load_digits
+""" from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score
@@ -338,23 +338,61 @@ y = digits.target
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 # Crear el modelo Naive Bayes Multinomial
-clf_nb = MultinomialNB()
+clf = MultinomialNB()
 
 # Entrenar el modelo
-clf_nb.fit(X_train, y_train)
+clf.fit(X_train, y_train)
 
 # Calcular y mostrar la puntuación de entrenamiento
-train_score_nb = clf_nb.score(X_train, y_train)
+train_score_nb = clf.score(X_train, y_train)
 print(f"Puntuación de entrenamiento: {train_score_nb:.4f}")
 
 # Calcular y mostrar la puntuación de prueba
-test_score_nb = clf_nb.score(X_test, y_test)
+test_score_nb = clf.score(X_test, y_test)
 print(f"Puntuación de prueba: {test_score_nb:.4f}")
 
 # Crear datos aleatorios y hacer una predicción
 random_data = np.random.rand(1, 64) * 16
-prediction_nb = clf_nb.predict(random_data)
-print(f"Predicción con datos aleatorios: {prediction_nb}")
+prediction_nb = clf.predict(random_data)
+print(f"Predicción con datos aleatorios: {prediction_nb}") """
+
+#3.11.14
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+import numpy as np
+
+# Cargar el dataset digits
+digits = load_digits()
+X = digits.data
+y = digits.target
+
+# Dividir los datos en conjunto de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Crear el modelo SVC con el kernel predeterminado (RBF)
+clf = SVC()
+
+# Entrenar el modelo
+clf.fit(X_train, y_train)
+
+# Calcular y mostrar la puntuación de entrenamiento
+train_score_svc = clf.score(X_train, y_train)
+print(f"Puntuación de entrenamiento: {train_score_svc:.4f}")
+
+# Calcular y mostrar la puntuación de prueba
+test_score_svc = clf.score(X_test, y_test)
+print(f"Puntuación de prueba: {test_score_svc:.4f}")
+
+# Crear datos aleatorios y hacer una predicción
+random_data = np.random.rand(1, 64) * 16
+prediction_svc = clf.predict(random_data)
+print(f"Predicción con datos aleatorios: {prediction_svc}")
+
+# Obtener los vectores de soporte
+support_vectors = clf.support_vectors_
+print(f"Número de vectores de soporte: {support_vectors.shape[0]}")
 
 
 
